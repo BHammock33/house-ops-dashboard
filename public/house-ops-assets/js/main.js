@@ -1,0 +1,37 @@
+import { createStore } from "./core/store.js";
+import { STORAGE_KEY, DEFAULT_STATE } from "./core/defaultState.js";
+import { apiGetState, apiSaveState } from "./core/api.js";
+
+import { initLinks } from "./features/links.js";
+import { initHouseNotes } from "./features/houseNotes.js";
+import { initProjects } from "./features/projects.js";
+import { initReading } from "./features/reading.js";
+import { initMeals } from "./features/meals.js";
+import { initWeekly } from "./features/weekly.js";
+import { initTools } from "./features/tools.js";
+
+const store = createStore({
+  storageKey: STORAGE_KEY,
+  defaultState: DEFAULT_STATE,
+  api: { get: apiGetState, save: apiSaveState }
+});
+
+const renders = [
+  initLinks(store),
+  initHouseNotes(store),
+  initProjects(store),
+  initReading(store),
+  initMeals(store),
+  initWeekly(store),
+  initTools(store),
+];
+
+function renderAll(){
+  const state = store.get();
+  for (const r of renders) r(state);
+}
+
+store.subscribe(renderAll);
+
+await store.load();
+renderAll();

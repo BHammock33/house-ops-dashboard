@@ -1,0 +1,104 @@
+/* House Ops Dashboard - Components (buttons, inputs, lists) */
+
+input, textarea{
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(231,238,247,0.12);
+  background: rgba(255,255,255,0.03);
+  color: var(--text);
+  outline: none;
+}
+
+input::placeholder, textarea::placeholder{ color: rgba(167,180,195,0.75); }
+
+input:focus, textarea:focus{
+  border-color: rgba(110,231,255,0.55);
+  box-shadow: 0 0 0 3px rgba(110,231,255,0.12);
+}
+
+/* Button pill used across the UI */
+.icon-btn{
+  appearance: none;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(231,238,247,0.12);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.icon-btn:hover{
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(231,238,247,0.18);
+}
+
+.icon-btn:active{ transform: translateY(1px); }
+
+.icon-btn-sm{
+  padding: 4px 8px;
+  font-size: 11px;
+}
+
+/* Lists used by the app */
+#linksList, #projectsList, #readingList, #mealsList{
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: grid;
+  gap: 10px;
+}
+
+/* Item rows (projects/reading/meals) */
+.item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(231,238,247,0.12);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+}
+
+.item-left{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.item-text{ min-width: 0; }
+
+.title{
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.meta{
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 3px;
+  overflow-wrap: anywhere;
+}
+
+.item.done .title{
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+
+/* Checkbox polish */
+.wk{ accent-color: var(--accent); }
+
+/* Details polish */
+details > summary{ list-style: none; }
+details > summary::-webkit-details-marker{ display: none; }
+
+/* Generic flex row helper (used in a few cards) */
+.row{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}

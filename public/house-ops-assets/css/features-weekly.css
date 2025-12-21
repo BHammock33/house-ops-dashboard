@@ -1,0 +1,39 @@
+/* Weekly checklist */
+
+.weekly{
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.week-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(231,238,247,0.12);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+}
+
+.week-left{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.week-label{
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Weekly editor */
+#weeklyManager > summary.icon-btn{
+  display: inline-flex;
+  width: auto;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+}

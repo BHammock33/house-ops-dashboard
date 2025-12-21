@@ -182,7 +182,7 @@
     </footer>
   </main>
 
-  <script src="{{ asset('house-ops-assets/app.js') }}"></script>
+  <script type="module" src="{{ asset('house-ops-assets/js/main.js') }}"></script>
 </body>
 </html>
 
