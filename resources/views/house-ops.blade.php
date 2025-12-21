@@ -7,7 +7,7 @@
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <link rel="stylesheet" href="{{ asset('house-ops/style.css') }}" />
+  <link rel="stylesheet" href="{{ asset('house-ops-assets/style.css') }}" />
 </head>
 <body>
   {{-- Paste the dashboard HTML body content here (from your index.html) --}}
@@ -58,6 +58,6 @@
       <p>Built with plain HTML + CSS. No framework. No drama.</p>
     </footer>
   </main>
-  <script src="{{ asset('house-ops/app.js') }}"></script>
+  <script src="{{ asset('house-ops-assets/app.js') }}"></script>
 </body>
 </html>

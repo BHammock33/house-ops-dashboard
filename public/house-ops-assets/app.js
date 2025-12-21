@@ -30,7 +30,38 @@
     }
   };
 
+  
   // ---------- helpers ----------
+
+    function getCsrfToken() {
+    const m = document.querySelector('meta[name="csrf-token"]');
+    return m ? m.getAttribute('content') : '';
+  }
+
+  async function apiGetState() {
+    const res = await fetch('/api/house-ops/state', {
+      credentials: 'same-origin',
+      headers: { 'Accept': 'application/json' }
+    });
+    if (!res.ok) return null;
+    // Could be null, {}, or a real object
+    return await res.json();
+  }
+
+  async function apiSaveState(payload) {
+    const res = await fetch('/api/house-ops/state', {
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-CSRF-TOKEN': getCsrfToken(),
+      },
+      body: JSON.stringify(payload),
+    });
+    return res.ok;
+  }
+
   function safeParse(json) {
     try { return JSON.parse(json); } catch { return null; }
   }
@@ -47,7 +78,14 @@
     return out;
   }
 
-  function loadState() {
+  async function loadState() {
+    
+    let serverState = null;
+    try {
+      serverState = await apiGetState();
+    } catch {
+      serverState = null;
+    }
     const raw = localStorage.getItem(STORAGE_KEY);
     const parsed = raw ? safeParse(raw) : null;
     const merged = deepMerge(DEFAULT_STATE, parsed || {});
@@ -55,9 +93,18 @@
     ensureWeeklyKey(merged);
     return merged;
   }
-
+  let saveTimer = null;
   function saveState() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      try {
+        await apiSaveState(state);
+      } catch {
+        //fall back to local
+      }
+    }, 400);
   }
 
   function el(id) { return document.getElementById(id); }
@@ -96,7 +143,7 @@
   }
 
   // ---------- state ----------
-  let state = loadState();
+  let state = null;
 
   // ---------- render ----------
   function renderTitle() {
@@ -475,7 +522,11 @@
   el("btnPrint").addEventListener("click", () => window.print());
 
   // ---------- boot ----------
-  ensureWeeklyKey(state);
-  saveState();
-  renderAll();
+
+  (async function boot() {
+    state = await loadState();
+
+    saveState();
+    renderAll();
+  })();
 })();
