@@ -13,7 +13,9 @@ export const DEFAULT_STATE = {
   ],
   houseNotes: "",
   projects: [],
-  reading: [],
+  golf: {
+    rounds: []
+  },
   meals: [
     { id: crypto.randomUUID(), name: "Salmon bowls", ingredients: ["salmon", "rice", "cucumber", "avocado", "soy sauce"] },
     { id: crypto.randomUUID(), name: "Chicken stir-fry", ingredients: ["chicken", "frozen stir-fry veggies", "rice", "sauce"] },

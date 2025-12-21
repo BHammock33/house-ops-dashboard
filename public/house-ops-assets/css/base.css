@@ -75,6 +75,15 @@ a:hover{ text-decoration: underline; }
   }
 }
 
+/* Layout helpers */
+.col-6{ grid-column: span 6; }
+.col-12{ grid-column: span 12; }
+
+@media (max-width: 900px){
+  .grid{ grid-template-columns: 1fr; }
+  .col-6, .col-12{ grid-column: auto; }
+}
+
 .card{
   border: 1px solid var(--border);
   background: rgba(18,26,36,0.75);
@@ -103,11 +112,4 @@ a:hover{ text-decoration: underline; }
   font-size: 13px;
 }
 
-/* Layout helpers */
-.col-6{ grid-column: span 6; }
-.col-12{ grid-column: span 12; }
 
-@media (max-width: 900px){
-  .grid{ grid-template-columns: 1fr; }
-  .col-6, .col-12{ grid-column: auto; }
-}

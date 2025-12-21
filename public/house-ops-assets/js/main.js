@@ -5,7 +5,8 @@ import { apiGetState, apiSaveState } from "./core/api.js";
 import { initLinks } from "./features/links.js";
 import { initHouseNotes } from "./features/houseNotes.js";
 import { initProjects } from "./features/projects.js";
-import { initReading } from "./features/reading.js";
+import { initGolfRounds } from "./features/golfRounds.js";
+import { initGolf } from "./features/golf.js";
 import { initMeals } from "./features/meals.js";
 import { initWeekly } from "./features/weekly.js";
 import { initTools } from "./features/tools.js";
@@ -20,7 +21,8 @@ const renders = [
   initLinks(store),
   initHouseNotes(store),
   initProjects(store),
-  initReading(store),
+  initGolfRounds(store),
+  initGolf(store),
   initMeals(store),
   initWeekly(store),
   initTools(store),

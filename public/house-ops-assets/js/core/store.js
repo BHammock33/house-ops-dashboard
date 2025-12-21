@@ -59,6 +59,9 @@ export function createStore({ storageKey, defaultState, api }){
     merged.projects = Array.isArray(merged.projects) ? merged.projects : [];
     merged.reading = Array.isArray(merged.reading) ? merged.reading : [];
     merged.links = Array.isArray(merged.links) ? merged.links : [];
+    merged.golf = (merged.golf && typeof merged.golf === "object") ? merged.golf : { rounds: [] };
+    merged.golf.rounds = Array.isArray(merged.golf.rounds) ? merged.golf.rounds : [];
+
 
     return merged;
   }

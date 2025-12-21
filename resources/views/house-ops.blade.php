@@ -75,31 +75,95 @@
 </div>
         <ul id="projectsList" style="margin-top: 12px;"></ul>
       </section>
+<section class="card">
+        <h2>This week</h2>
+        <p class="hint">Reset every Monday. Low stakes. High usefulness.</p>
 
-      <section class="card">
-        <h2>Reading queue</h2>
-        <p class="hint">Articles, books, long reads. Add the link so you actually come back.</p>
+        <div class="weekly" id="weeklyList"></div>
 
-        <div class="row" style="align-items: end;">
-  <label style="display: grid; gap: 6px; flex: 1 1 220px;">
-    <span class="meta">Title</span>
-    <input id="readingTitle" type="text" placeholder="That one article I swear I’ll read" />
-  </label>
+        <details id="weeklyManager" style="margin-top: 12px;">
+          <summary class="icon-btn" style="cursor: pointer;">Edit this week list</summary>
 
-  <label style="display: grid; gap: 6px; flex: 1 1 220px;">
-    <span class="meta">URL</span>
-    <input id="readingUrl" type="text" placeholder="https://..." />
-  </label>
+          <div style="margin-top: 12px; display: grid; gap: 10px;">
+            <div class="meta">Add an item</div>
+            <div class="row" style="align-items: end;">
+              <label style="display: grid; gap: 6px; flex: 1 1 240px;">
+                <span class="meta">Label</span>
+                <input id="newWeeklyLabel" type="text" placeholder="Example: Trash night" />
+              </label>
+              <button type="button" class="icon-btn" id="btnAddWeekly">Add</button>
+            </div>
 
-  <button type="button" class="icon-btn" id="btnAddReading">Add</button>
+            <div class="meta" style="margin-top: 8px;">Current items</div>
+            <div id="weeklyItemsEditor" style="display: grid; gap: 8px;"></div>
+
+            <p class="hint">These items persist. The checkmarks reset every Monday.</p>
+          </div>
+        </details>
+      </section>
+      <section class="card" id="golfCard">
+  <h2>Golf rounds</h2>
+  <p class="hint">Track course, cost, score, and vibes. No hole-by-hole misery.</p>
+
+  <div class="golf-add">
+    <div class="golf-add-top">
+      <label class="golf-field">
+        <span class="meta">Golf course</span>
+        <input id="golfCourse" type="text" placeholder="Mountain Shadows" />
+      </label>
+
+      <label class="golf-field">
+        <span class="meta">Price per round</span>
+        <input id="golfPrice" type="number" min="0" step="0.01" placeholder="45.00" />
+      </label>
+
+      <div class="golf-partner">
+  <div class="meta">Second golfer</div>
+
+  <div class="segmented" id="golfPartnerToggle">
+    <input type="radio" name="golfPartner" id="golfPartnerMaddie" value="maddie" checked />
+    <label for="golfPartnerMaddie">Maddie</label>
+
+    <input type="radio" name="golfPartner" id="golfPartnerBoys" value="boys" />
+    <label for="golfPartnerBoys">The Boys</label>
+  </div>
 </div>
 
+      <button type="button" class="icon-btn" id="btnAddGolfRound">Add round</button>
+    </div>
 
-        <ul id="readingList" style="margin-top: 12px;"></ul>
-      </section>
-    </section>
+    <div class="golf-entry">
+      <div class="golf-entry-head">
+        <div class="meta">Golfer</div>
+        <div class="meta">Score</div>
+        <div class="meta">Rating</div>
+      </div>
 
-    <section class="grid" style="margin-top: 16px;">
+      <div class="golf-entry-row">
+        <div class="golf-name">Jack</div>
+        <input id="golfScoreJack" type="number" inputmode="numeric" placeholder="89" />
+        <input id="golfRatingJack" type="number" min="1" max="10" step="1" placeholder="8" />
+      </div>
+
+      <div class="golf-entry-row" id="golfRowMaddie">
+        <div class="golf-name">Maddie</div>
+        <input id="golfScoreMaddie" type="number" inputmode="numeric" placeholder="82" />
+        <input id="golfRatingMaddie" type="number" min="1" max="10" step="1" placeholder="9" />
+      </div>
+
+      <div class="golf-entry-row" id="golfRowBoys">
+        <div class="golf-name">The Boys</div>
+        <input id="golfScoreBoys" type="number" inputmode="numeric" placeholder="101" />
+        <input id="golfRatingBoys" type="number" min="1" max="10" step="1" placeholder="7" />
+      </div>
+    </div>
+  </div>
+
+  <ul id="golfRoundsList" class="golf-rounds"></ul>
+</section>
+
+
+    
       <section class="card">
         <h2>Meal picker</h2>
         <p class="hint">Decision fatigue is real. Let the machine choose.</p>
@@ -132,32 +196,7 @@
         </div>
       </section>
 
-      <section class="card">
-        <h2>This week</h2>
-        <p class="hint">Reset every Monday. Low stakes. High usefulness.</p>
-
-        <div class="weekly" id="weeklyList"></div>
-
-        <details id="weeklyManager" style="margin-top: 12px;">
-          <summary class="icon-btn" style="cursor: pointer;">Edit this week list</summary>
-
-          <div style="margin-top: 12px; display: grid; gap: 10px;">
-            <div class="meta">Add an item</div>
-            <div class="row" style="align-items: end;">
-              <label style="display: grid; gap: 6px; flex: 1 1 240px;">
-                <span class="meta">Label</span>
-                <input id="newWeeklyLabel" type="text" placeholder="Example: Trash night" />
-              </label>
-              <button type="button" class="icon-btn" id="btnAddWeekly">Add</button>
-            </div>
-
-            <div class="meta" style="margin-top: 8px;">Current items</div>
-            <div id="weeklyItemsEditor" style="display: grid; gap: 8px;"></div>
-
-            <p class="hint">These items persist. The checkmarks reset every Monday.</p>
-          </div>
-        </details>
-      </section>
+      
 
       <section class="card">
         <h2>Backup and printing</h2>
@@ -175,7 +214,7 @@
           <button type="button" class="icon-btn" id="btnPrint">Print</button>
         </div>
       </section>
-    </section>
+    
 
     <footer class="footer">
       <p>Built to be boring in the best way.</p>

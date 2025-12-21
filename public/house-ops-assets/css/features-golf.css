@@ -1,0 +1,175 @@
+.golf-add-top{
+  display: grid;
+  gap: 10px;
+  align-items: end;
+
+  /* 2 columns that actually fit inside a 1/3-width card */
+  grid-template-columns: minmax(0, 1fr) 170px;
+
+  /* Put checkbox + button on their own row */
+  grid-template-areas:
+    "course price"
+    "maddie add";
+}
+
+.golf-add-top .golf-field:nth-child(1){ grid-area: course; min-width: 0; }
+.golf-add-top .golf-field:nth-child(2){ grid-area: price;  min-width: 0; }
+
+
+.golf-add-top .golf-check{
+  grid-area: maddie;
+  justify-self: start;
+}
+
+
+.golf-add-top #btnAddGolfRound{
+  grid-area: add;
+  justify-self: end;
+}
+
+/* Toggle container */
+.golf-partner{
+  display: grid;
+  gap: 6px;
+}
+
+/* Segmented toggle */
+.segmented{
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(231,238,247,0.12);
+  background: rgba(255,255,255,0.03);
+  width: fit-content;
+}
+
+.segmented input{
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.segmented label{
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 12px;
+  border: 1px solid transparent;
+  opacity: 0.9;
+}
+
+.segmented label:hover{
+  opacity: 1;
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(231,238,247,0.12);
+}
+
+/* Checked pill */
+.segmented input:checked + label{
+  background: rgba(110,231,255,0.14);
+  border-color: rgba(110,231,255,0.30);
+  opacity: 1;
+}
+
+/* Mobile */
+@media (max-width: 760px){
+  .golf-add-top{
+    grid-template-columns: 1fr;
+  }
+}
+
+.golf-entry{
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid rgba(231,238,247,0.12);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.02);
+}
+
+.golf-entry-head,
+.golf-entry-row{
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.golf-entry-head{
+  margin-bottom: 8px;
+}
+
+.golf-name{
+  font-weight: 650;
+}
+
+.golf-rounds{
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: grid;
+  gap: 10px;
+}
+
+.golf-round{
+  border: 1px solid rgba(231,238,247,0.12);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.02);
+  padding: 12px;
+}
+
+.golf-round-head{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.golf-round-title{
+  font-weight: 700;
+}
+
+.golf-round-meta{
+  color: rgba(167,180,195,0.9);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.golf-round-grid{
+  display: grid;
+  gap: 6px;
+}
+
+.golf-round-row{
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.golf-round-actions{
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 760px){
+  .golf-add-top{
+    grid-template-columns: 1fr;
+  }
+  .golf-entry-head,
+  .golf-entry-row,
+  .golf-round-row{
+    grid-template-columns: 1fr 1fr;
+  }
+  .golf-entry-head .meta:first-child,
+  .golf-name{
+    grid-column: 1 / -1;
+  }
+  .golf-round-meta{
+    white-space: normal;
+  }
+}
