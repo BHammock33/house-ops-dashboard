@@ -21,9 +21,9 @@ body{
 }
 
 .wrap{
-  max-width: 1040px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 40px 20px 60px;
+  padding: 32px 24px 64px;
 }
 
 .hero{
@@ -334,4 +334,345 @@ a:hover{ text-decoration: underline; }
   .hero, .card{ background: #fff; border-color: #ddd; }
   a{ color: #005; text-decoration: underline; }
   .btn, details{ display:none !important; }
+}
+/* ===========================
+   Dashboard UI polish
+   =========================== */
+
+/* Grid spacing: grid should own spacing, not the cards inside it */
+.grid { margin-top: 18px; }
+.grid .card { margin-top: 0; }          /* kill the per-card top margin inside grids */
+
+/* Nested cards (like the picked meal panel) should look intentional */
+.card .card {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(231,238,247,0.12);
+}
+
+/* Form controls */
+input, textarea, button, select {
+  font: inherit;
+  color: inherit;
+}
+
+input, textarea {
+  width: 100%;
+  min-width: 0; /* important inside CSS grid */
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(231,238,247,0.12);
+  border-radius: 12px;
+  padding: 10px 12px;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+input:focus, textarea:focus {
+  border-color: rgba(110,231,255,0.55);
+  box-shadow: 0 0 0 3px rgba(110,231,255,0.12);
+}
+
+/* Buttons */
+.icon-btn {
+  appearance: none;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(231,238,247,0.12);
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.icon-btn:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(231,238,247,0.18);
+}
+
+.icon-btn:active {
+  transform: translateY(1px);
+}
+
+/* Lists used by the app (avoid default UL bullets/padding) */
+#linksList, #projectsList, #readingList, #mealsList {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: grid;
+  gap: 10px;
+}
+
+/* Item rows (projects/reading/meals) */
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 12px;
+  border: 1px solid rgba(231,238,247,0.12);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0; /* allow text wrap instead of overflow */
+}
+
+.item-text {
+  min-width: 0;
+}
+
+.title {
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 3px;
+  overflow-wrap: anywhere;
+}
+
+.item.done .title {
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+
+/* Checkbox polish */
+.wk {
+  accent-color: var(--accent);
+}
+
+/* Details/summary polish */
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+@media(min-width: 860px){
+  #linksList {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 28px;
+    row-gap: 10px;
+  }
+  #linksLIst li {
+    width: 100%;
+  }
+}
+#linksList li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#linksList li a {
+  flex: 1;
+  min-width: 0;
+}
+
+#linksList li .icon-btn {
+  margin-left: auto;
+  padding: 3px 7px;
+  font-size: 11px;
+  border-radius: 999px;
+  opacity: 0.85;
+}
+
+/* "Danger" hover for remove buttons in links */
+#linksList li .icon-btn:hover {
+  background: rgba(255, 70, 70, 0.12);
+  border-color: rgba(255, 70, 70, 0.35);
+  color: rgba(255, 200, 200, 1);
+  opacity: 1;
+}
+#btnManageLinks {
+  display: none !important
+}
+/* Links editor should be an inline drawer, not a nested card */
+#linksManager.card {
+  width: 100%;
+  margin: 12px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Summary looks like a small link-style control */
+#linksManager > summary.icon-btn {
+  display: inline-flex;
+  width: auto;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+}
+
+/* The panel content becomes the "drawer" */
+#linksManager > summary + div {
+  margin-top: 10px !important;
+  padding: 12px;
+  border: 1px solid rgba(231,238,247,0.12);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.03);
+}
+
+/* Optional: subtle active state */
+#linksManager[open] > summary.icon-btn {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(231,238,247,0.18);
+}
+/* Make form rows inside cards wrap nicely on smaller widths */
+.card .row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.card .row > * {
+  min-width: 0;
+}
+
+/* Inputs should be allowed to grow, buttons should stay compact */
+.card .row input,
+.card .row textarea {
+  flex: 1 1 160px;
+}
+
+.card .row button {
+  flex: 0 0 auto;
+}
+/* This week */
+.weekly {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.wk-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(231,238,247,0.10);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  user-select: none;
+}
+
+.wk-row:hover {
+  border-color: rgba(231,238,247,0.18);
+  background: rgba(255,255,255,0.04);
+}
+
+.wk-row input.wk {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.wk-row span {
+  line-height: 1.25;
+}
+#weeklyManager > summary.icon-btn {
+  display: inline-flex;
+  width: auto;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+}
+
+#weeklyManager[open] > summary.icon-btn {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(231,238,247,0.18);
+}
+
+.weekly-edit-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.weekly-edit-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.weekly-del {
+  padding: 3px 7px;
+  font-size: 11px;
+  border-radius: 999px;
+  opacity: 0.85;
+}
+
+.weekly-del:hover {
+  background: rgba(255, 70, 70, 0.12);
+  border-color: rgba(255, 70, 70, 0.35);
+  color: rgba(255, 200, 200, 1);
+  opacity: 1;
+}
+/* Meal ingredients chips */
+.meal-chips{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.chip{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(231,238,247,0.14);
+  background: rgba(255,255,255,0.03);
+  font-size: 12px;
+  color: rgba(231,238,247,0.9);
+}
+
+.chip-x{
+  border: 0;
+  background: transparent;
+  color: rgba(231,238,247,0.7);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0;
+}
+
+.chip-x:hover{
+  color: rgba(255, 200, 200, 1);
+}
+
+/* Smaller buttons used in lists */
+.icon-btn-sm{
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 999px;
+}
+
+/* Meal editor row */
+.meal-editor{
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.meal-editor-input{
+  flex: 1;
+  min-width: 0;
 }

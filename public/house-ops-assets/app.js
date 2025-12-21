@@ -25,8 +25,15 @@
     ],
     mealHistory: [],
     weekly: {
-      weekKey: "",  // computed
-      checks: { calendar: false, money: false, food: false, house: false, people: false }
+      weekKey: "",
+      items: [
+        { id: "calendar", label: "Calendar checked" },
+        { id: "money", label: "Money looked at" },
+        { id: "food", label: "Food plan set" },
+        { id: "house", label: "House task picked" },
+        { id: "people", label: "People check-in" }
+      ],
+      checks: {} // keyed by item id
     }
   };
 
@@ -77,22 +84,42 @@
     }
     return out;
   }
-
-  async function loadState() {
-    
-    let serverState = null;
-    try {
-      serverState = await apiGetState();
-    } catch {
-      serverState = null;
-    }
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const parsed = raw ? safeParse(raw) : null;
-    const merged = deepMerge(DEFAULT_STATE, parsed || {});
-    merged.weekly = merged.weekly || DEFAULT_STATE.weekly;
-    ensureWeeklyKey(merged);
-    return merged;
+async function loadState() {
+  let serverState = null;
+  try {
+    serverState = await apiGetState(); // should return an object or null
+  } catch {
+    serverState = null;
   }
+
+  const raw = localStorage.getItem(STORAGE_KEY);
+  const localState = raw ? safeParse(raw) : null;
+
+  // merge priority: defaults -> server -> local
+  // (local wins so the current browser can override, but you can flip if you want)
+  let merged = deepMerge(DEFAULT_STATE, serverState || {});
+  merged = deepMerge(merged, localState || {});
+
+  merged.weekly = merged.weekly || DEFAULT_STATE.weekly;
+  ensureWeeklyKey(merged);
+
+  // migrate meals to { id, name, ingredients: [] }
+  merged.meals = (merged.meals || []).map((m) => {
+    const id = m.id || crypto.randomUUID();
+    const ingredients = Array.isArray(m.ingredients)
+      ? m.ingredients
+      : parseIngredients(m.ingredients);
+
+    return {
+      id,
+      name: m.name || "Untitled meal",
+      ingredients,
+    };
+  });
+
+  return merged;
+}
+
   let saveTimer = null;
   function saveState() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -126,12 +153,26 @@
   }
 
   function ensureWeeklyKey(s) {
-    const key = mondayKey();
-    if (s.weekly.weekKey !== key) {
-      s.weekly.weekKey = key;
-      s.weekly.checks = { calendar: false, money: false, food: false, house: false, people: false };
+  const key = mondayKey();
+
+  // Migration: if old format exists (calendar/money/etc) but items do not, keep the defaults.
+  s.weekly.items = s.weekly.items && s.weekly.items.length ? s.weekly.items : DEFAULT_STATE.weekly.items;
+
+  if (s.weekly.weekKey !== key) {
+    s.weekly.weekKey = key;
+
+    // reset checks for the new week
+    const fresh = {};
+    for (const item of s.weekly.items) fresh[item.id] = false;
+    s.weekly.checks = fresh;
+  } else {
+    // ensure checks has keys for all items
+    s.weekly.checks = s.weekly.checks || {};
+    for (const item of s.weekly.items) {
+      if (typeof s.weekly.checks[item.id] !== "boolean") s.weekly.checks[item.id] = false;
     }
   }
+}
 
   function sanitizeUrl(url) {
     const u = (url || "").trim();
@@ -143,7 +184,13 @@
   }
 
   // ---------- state ----------
-  let state = null;
+  let state;
+
+(async function boot() {
+  state = await loadState();
+  saveState();     // optional: writes normalized shape to localStorage
+  renderAll();
+})();
 
   // ---------- render ----------
   function renderTitle() {
@@ -296,49 +343,144 @@
     });
   }
 
-  function renderMeals() {
-    const ul = el("mealsList");
-    ul.innerHTML = "";
-    state.meals.forEach((m) => {
-      const li = document.createElement("li");
-      li.className = "item";
-      const left = document.createElement("div");
-      left.className = "item-left";
+  // Keep editor open state across rerenders
+const openMealEditors = new Set();
 
-      const label = document.createElement("div");
-      label.className = "item-text";
-      const t = document.createElement("div");
-      t.className = "title";
-      t.textContent = m.name || "Untitled meal";
-      const meta = document.createElement("div");
-      meta.className = "meta";
-      meta.textContent = (m.ingredients || "").trim();
-      label.appendChild(t);
-      if (m.ingredients) label.appendChild(meta);
+function renderMeals() {
+  const ul = el("mealsList");
+  ul.innerHTML = "";
 
-      left.appendChild(document.createElement("div")); // spacer for alignment
-      left.appendChild(label);
+  state.meals.forEach((meal) => {
+    const li = document.createElement("li");
+    li.className = "item meal-item";
 
-      const right = document.createElement("div");
-      right.style.display = "flex";
-      right.style.gap = "8px";
+    const left = document.createElement("div");
+    left.className = "item-left";
 
-      const del = document.createElement("button");
-      del.className = "icon-btn";
-      del.type = "button";
-      del.textContent = "Delete";
-      del.addEventListener("click", () => {
-        state.meals = state.meals.filter(x => x !== m);
+    const textWrap = document.createElement("div");
+    textWrap.className = "item-text";
+
+    const title = document.createElement("div");
+    title.className = "title";
+    title.textContent = meal.name || "Untitled meal";
+
+    const chips = document.createElement("div");
+    chips.className = "meal-chips";
+
+    (meal.ingredients || []).forEach((ing) => {
+      const chip = document.createElement("span");
+      chip.className = "chip";
+      chip.textContent = ing;
+
+      const x = document.createElement("button");
+      x.type = "button";
+      x.className = "chip-x";
+      x.textContent = "×";
+      x.title = "Remove ingredient";
+      x.addEventListener("click", () => {
+        meal.ingredients = (meal.ingredients || []).filter((v) => v !== ing);
         saveState();
         renderMeals();
       });
 
-      right.appendChild(del);
-      li.appendChild(left);
-      li.appendChild(right);
-      ul.appendChild(li);
+      chip.appendChild(x);
+      chips.appendChild(chip);
     });
-  }
+
+    textWrap.appendChild(title);
+    textWrap.appendChild(chips);
+
+    left.appendChild(textWrap);
+
+    const right = document.createElement("div");
+    right.style.display = "flex";
+    right.style.gap = "8px";
+    right.style.alignItems = "center";
+
+    const editBtn = document.createElement("button");
+    editBtn.type = "button";
+    editBtn.className = "icon-btn icon-btn-sm";
+    editBtn.textContent = openMealEditors.has(meal.id) ? "Done" : "Edit";
+    editBtn.addEventListener("click", () => {
+      if (openMealEditors.has(meal.id)) openMealEditors.delete(meal.id);
+      else openMealEditors.add(meal.id);
+      renderMeals();
+    });
+
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "icon-btn icon-btn-sm";
+    del.textContent = "Delete";
+    del.addEventListener("click", () => {
+      state.meals = state.meals.filter((m) => m.id !== meal.id);
+      saveState();
+      renderMeals();
+    });
+
+    right.appendChild(editBtn);
+    right.appendChild(del);
+
+    li.appendChild(left);
+    li.appendChild(right);
+
+    // Editor row
+    if (openMealEditors.has(meal.id)) {
+      const editor = document.createElement("div");
+      editor.className = "meal-editor";
+
+      const ingInput = document.createElement("input");
+      ingInput.type = "text";
+      ingInput.placeholder = "Add ingredient (press Enter)";
+      ingInput.className = "meal-editor-input";
+
+      const addBtn = document.createElement("button");
+      addBtn.type = "button";
+      addBtn.className = "icon-btn icon-btn-sm";
+      addBtn.textContent = "Add";
+
+      const addIngredient = () => {
+        const v = ingInput.value.trim();
+        if (!v) return;
+        meal.ingredients = Array.isArray(meal.ingredients) ? meal.ingredients : [];
+        meal.ingredients.push(v);
+        ingInput.value = "";
+        saveState();
+        renderMeals();
+      };
+
+      addBtn.addEventListener("click", addIngredient);
+      ingInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          addIngredient();
+        }
+      });
+
+      // Optional: quick edit ingredients as CSV
+      const csv = document.createElement("button");
+      csv.type = "button";
+      csv.className = "icon-btn icon-btn-sm";
+      csv.textContent = "Edit CSV";
+      csv.addEventListener("click", () => {
+        const current = ingredientsToString(meal.ingredients);
+        const next = prompt("Edit ingredients (comma-separated):", current);
+        if (next === null) return;
+        meal.ingredients = parseIngredients(next);
+        saveState();
+        renderMeals();
+      });
+
+      editor.appendChild(ingInput);
+      editor.appendChild(addBtn);
+      editor.appendChild(csv);
+
+      li.appendChild(editor);
+    }
+
+    ul.appendChild(li);
+  });
+}
+
 
   function setPickedMeal(meal) {
     if (!meal) {
@@ -348,21 +490,73 @@
       return;
     }
     el("pickedMealTitle").textContent = meal.name;
-    el("pickedMealIngredients").textContent = (meal.ingredients || "").trim();
+    el("pickedMealIngredients").textContent = ingredientsToString(meal.ingredients);
     el("mealHint").textContent = "Picked just now.";
   }
 
   function renderWeekly() {
-    ensureWeeklyKey(state);
-    document.querySelectorAll(".wk").forEach((cb) => {
-      const k = cb.getAttribute("data-k");
-      cb.checked = !!state.weekly.checks[k];
-      cb.addEventListener("change", () => {
-        state.weekly.checks[k] = cb.checked;
-        saveState();
-      }, { once: true });
+  ensureWeeklyKey(state);
+
+  const list = el("weeklyList");
+  const editor = el("weeklyItemsEditor");
+
+  if (!list || !editor) return;
+
+  // Render checklist rows
+  list.innerHTML = "";
+  for (const item of state.weekly.items) {
+    const row = document.createElement("label");
+    row.className = "wk-row";
+
+    const cb = document.createElement("input");
+    cb.className = "wk";
+    cb.type = "checkbox";
+    cb.checked = !!state.weekly.checks[item.id];
+
+    cb.addEventListener("change", () => {
+      state.weekly.checks[item.id] = cb.checked;
+      saveState();
     });
+
+    const span = document.createElement("span");
+    span.textContent = item.label;
+
+    row.appendChild(cb);
+    row.appendChild(span);
+    list.appendChild(row);
   }
+
+  // Render editor rows
+  editor.innerHTML = "";
+  state.weekly.items.forEach((item) => {
+    const wrap = document.createElement("div");
+    wrap.className = "weekly-edit-row";
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = item.label;
+    input.addEventListener("input", () => {
+      item.label = input.value;
+      saveState();
+      renderWeekly();
+    });
+
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "icon-btn weekly-del";
+    del.textContent = "Remove";
+    del.addEventListener("click", () => {
+      state.weekly.items = state.weekly.items.filter(x => x.id !== item.id);
+      delete state.weekly.checks[item.id];
+      saveState();
+      renderWeekly();
+    });
+
+    wrap.appendChild(input);
+    wrap.appendChild(del);
+    editor.appendChild(wrap);
+  });
+}
 
   function renderAll() {
     renderTitle();
@@ -410,16 +604,22 @@
   });
 
   el("btnAddMeal").addEventListener("click", () => {
-    const name = el("mealName").value.trim();
-    const ingredients = el("mealIngredients").value.trim();
-    if (!name) return;
+  const name = el("mealName").value.trim();
+  const ingredientsRaw = el("mealIngredients").value.trim();
+  if (!name) return;
 
-    state.meals.unshift({ name, ingredients });
-    el("mealName").value = "";
-    el("mealIngredients").value = "";
-    saveState();
-    renderMeals();
+  state.meals.unshift({
+    id: crypto.randomUUID(),
+    name,
+    ingredients: parseIngredients(ingredientsRaw),
   });
+
+  el("mealName").value = "";
+  el("mealIngredients").value = "";
+  saveState();
+  renderMeals();
+});
+
 
   el("btnPickMeal").addEventListener("click", () => {
     if (!state.meals.length) return;
@@ -439,7 +639,7 @@
   el("btnCopyMeal").addEventListener("click", async () => {
     const picked = state.lastPickedMeal;
     if (!picked) return;
-    const text = (picked.ingredients || "").trim();
+    const text = ingredientsToString(picked.ingredients).trim();
     if (!text) return;
 
     try {
@@ -453,6 +653,20 @@
     }
   });
 
+  el("btnAddWeekly")?.addEventListener("click", () => {
+  const label = el("newWeeklyLabel").value.trim();
+  if (!label) return;
+
+  const id = crypto.randomUUID();
+  state.weekly.items.push({ id, label });
+  state.weekly.checks[id] = false;
+
+  el("newWeeklyLabel").value = "";
+  saveState();
+  renderWeekly();
+});
+
+
   el("btnAddLink").addEventListener("click", () => {
     const label = el("newLinkLabel").value.trim();
     const url = el("newLinkUrl").value.trim();
@@ -464,6 +678,19 @@
     saveState();
     renderLinks();
   });
+
+  function parseIngredients(str) {
+  return (str || "")
+    .split(",")
+    .map(s => s.trim())
+    .filter(Boolean);
+}
+
+function ingredientsToString(ings) {
+  if (!ings) return "";
+  if (Array.isArray(ings)) return ings.join(", ");
+  return String(ings);
+}
 
   el("btnManageLinks").addEventListener("click", () => {
     const d = el("linksManager");

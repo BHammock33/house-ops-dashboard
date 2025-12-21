@@ -60,21 +60,19 @@
       <section class="card">
         <h2>Projects</h2>
         <p class="hint">Keep it short. Momentum beats guilt.</p>
+     <div class="row" style="align-items: end;">
+  <label style="display: grid; gap: 6px; flex: 1 1 220px;">
+    <span class="meta">Project</span>
+    <input id="projectText" type="text" placeholder="Fix the leaky faucet" />
+  </label>
 
-        <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: end;">
-          <label style="display: grid; gap: 6px;">
-            <span class="meta">Project</span>
-            <input id="projectText" type="text" placeholder="Fix the leaky faucet" />
-          </label>
+  <label style="display: grid; gap: 6px; flex: 0 0 160px;">
+    <span class="meta">Due</span>
+    <input id="projectDue" type="date" />
+  </label>
 
-          <label style="display: grid; gap: 6px;">
-            <span class="meta">Due</span>
-            <input id="projectDue" type="date" />
-          </label>
-
-          <button type="button" class="icon-btn" id="btnAddProject">Add</button>
-        </div>
-
+  <button type="button" class="icon-btn" id="btnAddProject">Add</button>
+</div>
         <ul id="projectsList" style="margin-top: 12px;"></ul>
       </section>
 
@@ -82,19 +80,20 @@
         <h2>Reading queue</h2>
         <p class="hint">Articles, books, long reads. Add the link so you actually come back.</p>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; align-items: end;">
-          <label style="display: grid; gap: 6px;">
-            <span class="meta">Title</span>
-            <input id="readingTitle" type="text" placeholder="That one article I swear I’ll read" />
-          </label>
+        <div class="row" style="align-items: end;">
+  <label style="display: grid; gap: 6px; flex: 1 1 220px;">
+    <span class="meta">Title</span>
+    <input id="readingTitle" type="text" placeholder="That one article I swear I’ll read" />
+  </label>
 
-          <label style="display: grid; gap: 6px;">
-            <span class="meta">URL</span>
-            <input id="readingUrl" type="text" placeholder="https://..." />
-          </label>
+  <label style="display: grid; gap: 6px; flex: 1 1 220px;">
+    <span class="meta">URL</span>
+    <input id="readingUrl" type="text" placeholder="https://..." />
+  </label>
 
-          <button type="button" class="icon-btn" id="btnAddReading">Add</button>
-        </div>
+  <button type="button" class="icon-btn" id="btnAddReading">Add</button>
+</div>
+
 
         <ul id="readingList" style="margin-top: 12px;"></ul>
       </section>
@@ -137,32 +136,27 @@
         <h2>This week</h2>
         <p class="hint">Reset every Monday. Low stakes. High usefulness.</p>
 
-        <div style="display: grid; gap: 10px;">
-          <label style="display: flex; gap: 10px; align-items: center;">
-            <input type="checkbox" class="wk" data-k="calendar" />
-            <span>Calendar checked</span>
-          </label>
+        <div class="weekly" id="weeklyList"></div>
 
-          <label style="display: flex; gap: 10px; align-items: center;">
-            <input type="checkbox" class="wk" data-k="money" />
-            <span>Money looked at</span>
-          </label>
+        <details id="weeklyManager" style="margin-top: 12px;">
+          <summary class="icon-btn" style="cursor: pointer;">Edit this week list</summary>
 
-          <label style="display: flex; gap: 10px; align-items: center;">
-            <input type="checkbox" class="wk" data-k="food" />
-            <span>Food plan set</span>
-          </label>
+          <div style="margin-top: 12px; display: grid; gap: 10px;">
+            <div class="meta">Add an item</div>
+            <div class="row" style="align-items: end;">
+              <label style="display: grid; gap: 6px; flex: 1 1 240px;">
+                <span class="meta">Label</span>
+                <input id="newWeeklyLabel" type="text" placeholder="Example: Trash night" />
+              </label>
+              <button type="button" class="icon-btn" id="btnAddWeekly">Add</button>
+            </div>
 
-          <label style="display: flex; gap: 10px; align-items: center;">
-            <input type="checkbox" class="wk" data-k="house" />
-            <span>House task picked</span>
-          </label>
+            <div class="meta" style="margin-top: 8px;">Current items</div>
+            <div id="weeklyItemsEditor" style="display: grid; gap: 8px;"></div>
 
-          <label style="display: flex; gap: 10px; align-items: center;">
-            <input type="checkbox" class="wk" data-k="people" />
-            <span>People check-in</span>
-          </label>
-        </div>
+            <p class="hint">These items persist. The checkmarks reset every Monday.</p>
+          </div>
+        </details>
       </section>
 
       <section class="card">
