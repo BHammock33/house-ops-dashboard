@@ -7,7 +7,7 @@
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <link rel="stylesheet" href="{{ asset('house-ops-assets/style.css') }}" />
+  <link rel="stylesheet" href="{{ secure_asset('house-ops-assets/style.css') }}" />
 </head>
 <body>
   <main class="wrap">
@@ -248,7 +248,7 @@
     </footer>
   </main>
 
-  <script type="module" src="{{ asset('house-ops-assets/js/main.js') }}"></script>
+  <script type="module" src="{{ secure_asset('house-ops-assets/js/main.js') }}"></script>
 </body>
 </html>
 
