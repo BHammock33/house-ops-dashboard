@@ -1,4 +1,4 @@
-import { el } from "../core/dom.js";
+/* import { el } from "../core/dom.js";
 
 function money(n){
   if (n == null || n === "") return "";
@@ -202,4 +202,4 @@ export function initGolfRounds(store){
     syncMaddieInputs();
     renderGolfRounds(state, store);
   };
-}
+} */

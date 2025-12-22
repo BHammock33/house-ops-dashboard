@@ -43,3 +43,57 @@
   flex: 1;
   min-width: 0;
 }
+.meal-item{
+  list-style: none;
+}
+
+.meal-details{
+  border: 1px solid rgba(231,238,247,0.12);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.02);
+  overflow: hidden;
+}
+
+.meal-summary{
+  cursor: pointer;
+  padding: 12px;
+  list-style: none;
+}
+
+.meal-summary::-webkit-details-marker{ display: none; }
+.meal-summary::marker{ content: ""; }
+
+.meal-summary-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.meal-chevron{
+  opacity: 0.75;
+  transition: transform 140ms ease;
+}
+
+.meal-details[open] .meal-chevron{
+  transform: rotate(180deg);
+}
+
+.meal-body{
+  padding: 0 12px 12px;
+  border-top: 1px solid rgba(231,238,247,0.10);
+}
+
+.meal-actions{
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Scroll cap for meals list (kicks in after JS sets max-height) */
+#mealsList.is-scroll{
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding-right: 4px;
+}

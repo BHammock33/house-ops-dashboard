@@ -1,39 +1,73 @@
+/* features-golf.css (cleaned + synced to current Blade + golf.js)
+   - Add round editor is a <details id="golfAddManager"> chip
+   - Golf rounds render as: <li class="golf-round"><details class="golf-round-details">...</details></li>
+*/
+
+/* ---------- Add round: details chip (matches Links pattern) ---------- */
+#golfAddManager.card{
+  width: min(640px, 100%);
+  margin-left: auto;
+  margin-right: 0;
+  padding: 12px;
+}
+
+#golfAddManager:not([open]){
+  width: fit-content;
+  margin-left: auto;
+  margin-right: 0;
+
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+#golfAddManager[open]{
+  border: 1px solid rgba(231,238,247,0.12);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.02);
+}
+
+#golfAddManager > summary.icon-btn{
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: 0;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+/* ---------- Add round: form layout ---------- */
+.golf-add-actions{
+  display: flex;
+  justify-content: flex-end;
+}
+
 .golf-add-top{
   display: grid;
   gap: 10px;
   align-items: end;
 
-  /* 2 columns that actually fit inside a 1/3-width card */
+  /* Fits inside a 1/3-width dashboard card nicely */
   grid-template-columns: minmax(0, 1fr) 170px;
 
-  /* Put checkbox + button on their own row */
   grid-template-areas:
     "course price"
-    "maddie add";
+    "partner partner";
 }
 
 .golf-add-top .golf-field:nth-child(1){ grid-area: course; min-width: 0; }
 .golf-add-top .golf-field:nth-child(2){ grid-area: price;  min-width: 0; }
+.golf-add-top .golf-partner{ grid-area: partner; }
 
-
-.golf-add-top .golf-check{
-  grid-area: maddie;
-  justify-self: start;
-}
-
-
-.golf-add-top #btnAddGolfRound{
-  grid-area: add;
-  justify-self: end;
-}
-
-/* Toggle container */
+/* ---------- Partner toggle (segmented control) ---------- */
 .golf-partner{
   display: grid;
   gap: 6px;
 }
 
-/* Segmented toggle */
 .segmented{
   display: inline-grid;
   grid-auto-flow: column;
@@ -67,20 +101,13 @@
   border-color: rgba(231,238,247,0.12);
 }
 
-/* Checked pill */
 .segmented input:checked + label{
   background: rgba(110,231,255,0.14);
   border-color: rgba(110,231,255,0.30);
   opacity: 1;
 }
 
-/* Mobile */
-@media (max-width: 760px){
-  .golf-add-top{
-    grid-template-columns: 1fr;
-  }
-}
-
+/* ---------- Add round: entry grid ---------- */
 .golf-entry{
   margin-top: 12px;
   padding: 12px;
@@ -105,6 +132,7 @@
   font-weight: 650;
 }
 
+/* ---------- Rounds list ---------- */
 .golf-rounds{
   list-style: none;
   padding: 0;
@@ -113,34 +141,78 @@
   gap: 10px;
 }
 
+/* ---------- Round card (collapsible <details>) ---------- */
 .golf-round{
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.golf-round-details{
   border: 1px solid rgba(231,238,247,0.12);
   border-radius: 16px;
   background: rgba(255,255,255,0.02);
-  padding: 12px;
 }
+
+.golf-round-summary{
+  cursor: pointer;
+  padding: 12px;
+  list-style: none;
+}
+
+/* Remove default marker so only our chevron shows */
+.golf-round-summary::-webkit-details-marker{ display: none; }
+.golf-round-summary::marker{ content: ""; }
 
 .golf-round-head{
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   gap: 12px;
-  margin-bottom: 10px;
 }
 
 .golf-round-title{
   font-weight: 700;
+  min-width: 0;
+}
+
+.golf-round-summary-right{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 0 1 auto;
 }
 
 .golf-round-meta{
   color: rgba(167,180,195,0.9);
   font-size: 13px;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 240px;
+}
+
+.golf-chevron{
+  opacity: 0.75;
+  flex: 0 0 auto;
+  transform: rotate(0deg);
+  transition: transform 140ms ease;
+}
+
+.golf-round-details[open] .golf-chevron{
+  transform: rotate(180deg);
+}
+
+.golf-round-body{
+  padding: 0 12px 12px;
+  border-top: 1px solid rgba(231,238,247,0.10);
 }
 
 .golf-round-grid{
   display: grid;
   gap: 6px;
+  margin-top: 10px;
 }
 
 .golf-round-row{
@@ -156,20 +228,35 @@
   justify-content: flex-end;
 }
 
+/* ---------- Responsive ---------- */
 @media (max-width: 760px){
   .golf-add-top{
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "course"
+      "price"
+      "partner";
   }
+
   .golf-entry-head,
   .golf-entry-row,
   .golf-round-row{
     grid-template-columns: 1fr 1fr;
   }
+
   .golf-entry-head .meta:first-child,
   .golf-name{
     grid-column: 1 / -1;
   }
+
   .golf-round-meta{
     white-space: normal;
+    max-width: none;
   }
+}
+
+.golf-rounds.is-scroll{
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding-right: 4px;
 }

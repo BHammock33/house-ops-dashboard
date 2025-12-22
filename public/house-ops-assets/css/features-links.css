@@ -1,4 +1,24 @@
-/* Links list + editor */
+/* features-links.v2.css
+   Quick Links actions pinned to bottom-right.
+   Edit Links + Export/Print render as compact chips, with dropdown panels that open upward.
+*/
+
+.quick-links{
+  position: relative;
+  padding-bottom: 64px; /* reserve space for chips */
+}
+
+.quick-links-actions{
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+/* Links list columns */
 #linksList{
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 28px;
@@ -10,84 +30,76 @@
   }
 }
 
+/* Each link row */
 #linksList li{
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-#linksList li a{
-  flex: 1;
-  min-width: 0;
+#linksList a{
+  color: #8be7ff;
+  text-decoration: none;
+  font-weight: 600;
 }
 
-/* Remove buttons for links */
-#linksList li .icon-btn{
+#linksList a:hover{
+  text-decoration: underline;
+}
+
+#linksList button{
   margin-left: auto;
-  padding: 3px 7px;
+  padding: 4px 8px;
   font-size: 11px;
   border-radius: 999px;
-  opacity: 0.85;
 }
 
-#linksList li .icon-btn:hover{
-  background: rgba(255, 70, 70, 0.12);
-  border-color: rgba(255, 70, 70, 0.35);
-  color: rgba(255, 200, 200, 1);
-  opacity: 1;
-}
-
-/* Hide the old "Manage links" button; we use the details chip instead */
-#btnManageLinks{ display: none !important; }
-
-/* Links editor should not be full-width */
-#linksManager.card{
-  width: min(640px, 100%);
-  margin-left: auto;
-  margin-right: 0;
-  padding: 12px;
-}
-#linksManager:not([open]) {
+/* Chips */
+.links-chip{
   width: fit-content;
-  margin-left: auto;
-  margin-right: 0;
-
-  /* strip "card" look when closed */
-  padding: 0;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
+  position: relative; /* anchors the dropdown panel */
 }
 
-/* When open, it becomes a proper editor card */
-#linksManager[open] {
-  width: min(640px, 100%);
-  margin-left: auto;
-  margin-right: 0;
-  padding: 12px;
-
-  /* re-apply the card feel (match your .card tokens) */
-  border: 1px solid rgba(231,238,247,0.12);
-  border-radius: 18px;
-  background: rgba(255,255,255,0.02);
-}
-
-#linksManager > summary.icon-btn{
-  display: block;          /* key change */
-  width: fit-content;      /* shrink to chip */
-  margin-left: auto;       /* push to the right */
-  margin-right: 0;
-
+.links-chip > summary.icon-btn{
+  display: block;
+  width: fit-content;
   padding: 6px 10px;
   font-size: 12px;
   border-radius: 999px;
+  cursor: pointer;
+  list-style: none;
 }
 
-#linksManager[open] > summary.icon-btn{
+/* remove native marker */
+.links-chip > summary.icon-btn::-webkit-details-marker{ display:none; }
+.links-chip > summary.icon-btn::marker{ content:""; }
+
+/* Active chip state */
+.links-chip[open] > summary.icon-btn{
   background: rgba(255,255,255,0.06);
   border-color: rgba(231,238,247,0.18);
 }
 
-#linksManager > summary + div{
-  margin-top: 12px !important;
+/* Dropdown panel (opens upward so it doesn't push layout) */
+.links-chip[open] > .links-panel{
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 10px);
+  z-index: 40;
+
+  width: min(560px, calc(100vw - 48px));
+  max-height: 70vh;
+  overflow: auto;
+
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid rgba(231,238,247,0.12);
+  background: rgba(10,14,18,0.95);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.45);
 }
+
+/* Make sure inner sections don't need inline margin hacks */
+.links-panel > *:first-child{
+  margin-top: 0 !important;
+}
+

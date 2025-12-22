@@ -80,6 +80,26 @@ function normalizeRound(r){
     },
   };
 }
+function applyScrollCap(listEl, maxItems = 5){
+  if (!listEl) return;
+
+  const kids = Array.from(listEl.children);
+
+  // Reset first so measurements are correct
+  listEl.classList.remove("is-scroll");
+  listEl.style.maxHeight = "";
+
+  if (kids.length <= maxItems) return;
+
+  // Measure the visual height of the first N items (includes grid gaps automatically)
+  const first = kids[0].getBoundingClientRect();
+  const nth = kids[maxItems - 1].getBoundingClientRect();
+
+  const height = Math.ceil((nth.bottom - first.top) + 2); // +2 for breathing room
+
+  listEl.style.maxHeight = `${height}px`;
+  listEl.classList.add("is-scroll");
+}
 
 function renderGolf(state, store){
   const ul = el("golfRoundsList");
@@ -95,6 +115,13 @@ function renderGolf(state, store){
     const li = document.createElement("li");
     li.className = "golf-round";
 
+    const details = document.createElement("details");
+    details.className = "golf-round-details";
+
+    const summary = document.createElement("summary");
+    summary.className = "golf-round-summary";
+
+    // Header row inside summary
     const header = document.createElement("div");
     header.className = "golf-round-head";
 
@@ -102,16 +129,32 @@ function renderGolf(state, store){
     left.className = "golf-round-title";
     left.textContent = r.course || "Untitled course";
 
+    const rightWrap = document.createElement("div");
+    rightWrap.className = "golf-round-summary-right";
+
     const right = document.createElement("div");
     right.className = "golf-round-meta";
-
     const parts = [];
     if (r.price != null) parts.push(money(r.price));
     parts.push(r.partner === "maddie" ? "Maddie" : "The Boys");
     right.textContent = parts.filter(Boolean).join(" • ");
 
+    const chev = document.createElement("span");
+    chev.className = "golf-chevron";
+    chev.setAttribute("aria-hidden", "true");
+    chev.textContent = "▾";
+
+    rightWrap.appendChild(right);
+    rightWrap.appendChild(chev);
+
     header.appendChild(left);
-    header.appendChild(right);
+    header.appendChild(rightWrap);
+
+    summary.appendChild(header);
+
+    // Body (expanded content)
+    const body = document.createElement("div");
+    body.className = "golf-round-body";
 
     const grid = document.createElement("div");
     grid.className = "golf-round-grid";
@@ -161,7 +204,9 @@ function renderGolf(state, store){
     del.type = "button";
     del.className = "icon-btn icon-btn-sm";
     del.textContent = "Delete";
-    del.addEventListener("click", () => {
+    del.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       store.update((s) => {
         s.golf = s.golf || { rounds: [] };
         s.golf.rounds = (s.golf.rounds || []).filter(x => x.id !== r.id);
@@ -171,13 +216,18 @@ function renderGolf(state, store){
 
     actions.appendChild(del);
 
-    li.appendChild(header);
-    li.appendChild(grid);
-    li.appendChild(actions);
+    body.appendChild(grid);
+    body.appendChild(actions);
 
+    details.appendChild(summary); // summary must be first child
+    details.appendChild(body);
+
+    li.appendChild(details);
     ul.appendChild(li);
   });
+   applyScrollCap(ul, 5);
 }
+
 
 export function initGolf(store){
   const btnAdd = el("btnAddGolfRound");

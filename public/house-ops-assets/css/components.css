@@ -1,6 +1,7 @@
 /* House Ops Dashboard - Components (buttons, inputs, lists) */
 
-input, textarea{
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+textarea{
   width: 100%;
   padding: 10px 12px;
   border-radius: 14px;
@@ -8,6 +9,16 @@ input, textarea{
   background: rgba(255,255,255,0.03);
   color: var(--text);
   outline: none;
+}
+
+/* Checkboxes/radios should not inherit "text input" sizing */
+input[type="checkbox"],
+input[type="radio"]{
+  width: auto;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
 }
 
 input::placeholder, textarea::placeholder{ color: rgba(167,180,195,0.75); }
