@@ -1,6 +1,13 @@
 <!doctype html>
 <html lang="en" data-user-id="{{ auth()->id() ?? 'guest' }}">
-<header class="hero" style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initaial-scale=1" />
+  <link rel="styleheet" href="{{ secure_asset('house-ops-assets/style.css')}}" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero" style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
   <div>
     <h1 id="siteTitle">Liebes Home Base</h1>
     <p class="sub" id="siteSubtitle"></p>
@@ -21,13 +28,6 @@
     </form>
   @endauth
 </header>
-
-<body>
-  <main class="wrap">
-    <header class="hero">
-      <h1 id="siteTitle">Liebes Home Base</h1>
-      <p class="sub" id="siteSubtitle"></p>
-    </header>
 
     <section class="grid">
         <section class="card quick-links">
