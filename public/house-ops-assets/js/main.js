@@ -10,8 +10,16 @@ import { initMeals } from "./features/meals.js";
 import { initWeekly } from "./features/weekly.js";
 import { initTools } from "./features/tools.js";
 
+const userId = document.documentElement.dataset.userId || "guest";
+
+// Per-user local cache key (prevents “User B sees User A’s localStorage”)
+// Also lets us migrate the old global key one time.
+const storageKey = `${STORAGE_KEY}:${userId}`;
+const legacyStorageKeys = [STORAGE_KEY];
+
 const store = createStore({
-  storageKey: STORAGE_KEY,
+  storageKey,
+  legacyStorageKeys,
   defaultState: DEFAULT_STATE,
   api: { get: apiGetState, save: apiSaveState }
 });

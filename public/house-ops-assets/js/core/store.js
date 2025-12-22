@@ -1,6 +1,6 @@
 import { safeParse, deepMerge, ensureWeeklyKey, parseIngredients, cloneState } from "./util.js";
 
-export function createStore({ storageKey, defaultState, api }){
+export function createStore({ storageKey, legacyStorageKeys = [], defaultState, api }){
   let state = cloneState(defaultState);
   let saveTimer = null;
   const subs = new Set();
@@ -18,7 +18,7 @@ export function createStore({ storageKey, defaultState, api }){
   }
 
   async function persistServer(){
-    try { await api.save(state); } catch { /* local-only fallback */ }
+    try { await api.save(state); } catch { /* server down, keep local */ }
   }
 
   function save(){
@@ -62,7 +62,6 @@ export function createStore({ storageKey, defaultState, api }){
     merged.golf = (merged.golf && typeof merged.golf === "object") ? merged.golf : { rounds: [] };
     merged.golf.rounds = Array.isArray(merged.golf.rounds) ? merged.golf.rounds : [];
 
-
     return merged;
   }
 
@@ -75,19 +74,62 @@ export function createStore({ storageKey, defaultState, api }){
   }
 
   async function load(){
+    // Server is the source of truth for Railway + multi-device.
+    let serverOk = false;
     let serverState = null;
-    try { serverState = await api.get(); } catch { serverState = null; }
 
-    const raw = localStorage.getItem(storageKey);
-    const localState = raw ? safeParse(raw) : null;
+    try {
+      serverState = await api.get(); // {state: ...} on backend, api.js returns the state or null
+      serverOk = true;
+    } catch {
+      serverOk = false;
+      serverState = null;
+    }
 
-    let merged = deepMerge(defaultState, serverState || {});
-    merged = deepMerge(merged, localState || {});
+    // 1) If the server has state, use it and overwrite local cache.
+    if (serverState && typeof serverState === "object") {
+      let merged = deepMerge(defaultState, serverState);
+      merged = migrate(merged);
+
+      state = merged;
+      persistLocal();
+      notify();
+      return state;
+    }
+
+    // 2) Otherwise fall back to local cache (new key first, then legacy keys).
+    const keysToTry = [storageKey, ...legacyStorageKeys];
+    let usedKey = null;
+    let localState = null;
+
+    for (const k of keysToTry) {
+      const raw = localStorage.getItem(k);
+      if (!raw) continue;
+      const parsed = safeParse(raw);
+      if (parsed && typeof parsed === "object") {
+        localState = parsed;
+        usedKey = k;
+        break;
+      }
+    }
+
+    let merged = deepMerge(defaultState, localState || {});
     merged = migrate(merged);
 
     state = merged;
     persistLocal();
     notify();
+
+    // 3) If server is reachable but empty, push local up so it becomes cross-device.
+    if (serverOk) {
+      try { await api.save(state); } catch { /* ignore */ }
+    }
+
+    // 4) If we loaded from a legacy key, remove it to prevent cross-user bleed.
+    if (usedKey && legacyStorageKeys.includes(usedKey)) {
+      try { localStorage.removeItem(usedKey); } catch { /* ignore */ }
+    }
+
     return state;
   }
 
