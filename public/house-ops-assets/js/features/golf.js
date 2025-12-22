@@ -22,33 +22,10 @@ function getPartnerChoice(){
 
 function syncPartnerUI(){
   const partner = getPartnerChoice();
-
   const rowM = el("golfRowMaddie");
   const rowB = el("golfRowBoys");
-
-  const sM = el("golfScoreMaddie");
-  const rM = el("golfRatingMaddie");
-  const sB = el("golfScoreBoys");
-  const rB = el("golfRatingBoys");
-
-  const maddieOn = partner === "maddie";
-
-  if (rowM) rowM.style.display = maddieOn ? "" : "none";
-  if (rowB) rowB.style.display = maddieOn ? "none" : "";
-
-  if (sM) sM.disabled = !maddieOn;
-  if (rM) rM.disabled = !maddieOn;
-  if (sB) sB.disabled = maddieOn;
-  if (rB) rB.disabled = maddieOn;
-
-  // Optional: clear the hidden side so you do not accidentally save stale values
-  if (!maddieOn){
-    if (sM) sM.value = "";
-    if (rM) rM.value = "";
-  } else {
-    if (sB) sB.value = "";
-    if (rB) rB.value = "";
-  }
+  if (rowM) rowM.style.display = partner === "maddie" ? "grid" : "none";
+  if (rowB) rowB.style.display = partner === "boys" ? "grid" : "none";
 }
 
 function normalizeRound(r){
@@ -71,34 +48,137 @@ function normalizeRound(r){
     course: r?.course || "",
     price: r?.price ?? null,
     partner,
-    // keep this boolean if any older code relies on it
-    maddiePlayed: partner === "maddie",
     players: {
-      jack: { score: jack.score ?? null, rating: jack.rating ?? null },
-      maddie: { score: maddie.score ?? null, rating: maddie.rating ?? null },
-      boys: { score: boys.score ?? null, rating: boys.rating ?? null },
+      jack: {
+        score: jack.score ?? null,
+        rating: jack.rating ?? null,
+      },
+      maddie: {
+        score: maddie.score ?? null,
+        rating: maddie.rating ?? null,
+      },
+      boys: {
+        score: boys.score ?? null,
+        rating: boys.rating ?? null,
+      },
     },
   };
 }
+
 function applyScrollCap(listEl, maxItems = 5){
   if (!listEl) return;
 
   const kids = Array.from(listEl.children);
 
-  // Reset first so measurements are correct
   listEl.classList.remove("is-scroll");
   listEl.style.maxHeight = "";
 
   if (kids.length <= maxItems) return;
 
-  // Measure the visual height of the first N items (includes grid gaps automatically)
   const first = kids[0].getBoundingClientRect();
   const nth = kids[maxItems - 1].getBoundingClientRect();
-
-  const height = Math.ceil((nth.bottom - first.top) + 2); // +2 for breathing room
+  const height = Math.ceil((nth.bottom - first.top) + 2);
 
   listEl.style.maxHeight = `${height}px`;
   listEl.classList.add("is-scroll");
+}
+
+const openRounds = new Set();
+
+export function initGolf(store){
+  const btnToggle = el("btnAddGolfRound");
+  const panel = el("golfAdd");
+  const btnSave = el("btnSaveGolfRound");
+
+  // Toggle listeners
+  const r1 = document.getElementById("golfPartnerMaddie");
+  const r2 = document.getElementById("golfPartnerBoys");
+  if (r1) r1.addEventListener("change", syncPartnerUI);
+  if (r2) r2.addEventListener("change", syncPartnerUI);
+
+  // Open/close the add-round panel
+  if (btnToggle && panel){
+    const setLabel = () => { btnToggle.textContent = panel.classList.contains("is-open") ? "Cancel" : "Add round"; };
+    setLabel();
+
+    btnToggle.addEventListener("click", () => {
+      panel.classList.toggle("is-open");
+      setLabel();
+      if (panel.classList.contains("is-open")){
+        syncPartnerUI();
+        el("golfCourse")?.focus?.();
+      }
+    });
+  }
+
+  // Save round
+  if (btnSave){
+    btnSave.addEventListener("click", () => {
+      const course = (el("golfCourse")?.value || "").trim();
+      const price = numOrNull(el("golfPrice")?.value);
+      const partner = getPartnerChoice();
+
+      const jack = {
+        score: numOrNull(el("golfScoreJack")?.value),
+        rating: numOrNull(el("golfRatingJack")?.value),
+      };
+
+      const maddie = {
+        score: numOrNull(el("golfScoreMaddie")?.value),
+        rating: numOrNull(el("golfRatingMaddie")?.value),
+      };
+
+      const boys = {
+        score: numOrNull(el("golfScoreBoys")?.value),
+        rating: numOrNull(el("golfRatingBoys")?.value),
+      };
+
+      if (!course) return;
+
+      const newId = crypto.randomUUID();
+
+      store.update((s) => {
+        s.golf = s.golf || { rounds: [] };
+
+        const round = normalizeRound({
+          id: newId,
+          createdAt: new Date().toISOString(),
+          course,
+          price,
+          partner,
+          maddiePlayed: partner === "maddie",
+          players: { jack, maddie, boys },
+        });
+
+        s.golf.rounds.unshift(round);
+        return s;
+      });
+
+      // Keep the newly-added round open (optional but nice)
+      openRounds.clear();
+      openRounds.add(newId);
+
+      // Clear inputs
+      el("golfScoreJack").value = "";
+      el("golfRatingJack").value = "";
+      el("golfScoreMaddie").value = "";
+      el("golfRatingMaddie").value = "";
+      el("golfScoreBoys").value = "";
+      el("golfRatingBoys").value = "";
+
+      // Close panel after save
+      if (panel) panel.classList.remove("is-open");
+      if (btnToggle) btnToggle.textContent = "Add round";
+
+      syncPartnerUI();
+    });
+  }
+
+  // Initial sync so the correct row is visible
+  syncPartnerUI();
+
+  // Return renderer
+  return (state) => renderGolf(state, store);
 }
 
 function renderGolf(state, store){
@@ -107,21 +187,63 @@ function renderGolf(state, store){
 
   ul.innerHTML = "";
 
+  const toTime = (isoLike) => {
+    const t = Date.parse(isoLike);
+    return Number.isFinite(t) ? t : 0;
+  };
+
   const rounds = (state.golf?.rounds || [])
     .map(normalizeRound)
-    .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+    // Newest first (top of list)
+    .sort((a, b) => toTime(b.createdAt) - toTime(a.createdAt));
+
+  // Persist "The Boys" heat per streak segment, even after a Maddie round.
+  // We calculate streak position in chronological order (oldest -> newest),
+  // then apply the precomputed level during render (which is newest -> oldest).
+  const boysLevelById = new Map();
+  let boysRunIndex = 0;
+
+  const chrono = [...rounds].sort((a, b) => toTime(a.createdAt) - toTime(b.createdAt));
+  for (const r of chrono){
+    if (r.partner === "boys"){
+      // First boys round in a run: level 0 (base). Second: 1. Third: 2. Fourth+: 3.
+      boysLevelById.set(r.id, Math.min(boysRunIndex, 3));
+      boysRunIndex += 1;
+    } else {
+      boysRunIndex = 0;
+    }
+  }
 
   rounds.forEach((r) => {
+    const boysLevel = r.partner === "boys" ? (boysLevelById.get(r.id) ?? 0) : null;
+
     const li = document.createElement("li");
     li.className = "golf-round";
 
+    // Apply warning classes to both the <li> and the <details>.
+    // Level 0 is intentionally "base" styling, so we only add classes for 1+.
+    if (boysLevel != null){
+      li.dataset.boysLevel = String(boysLevel);
+      if (boysLevel > 0) li.classList.add(`boys-streak-${boysLevel}`);
+    }
+
     const details = document.createElement("details");
     details.className = "golf-round-details";
+    details.open = openRounds.has(r.id);
+
+    if (boysLevel != null){
+      details.dataset.boysLevel = String(boysLevel);
+      if (boysLevel > 0) details.classList.add(`boys-streak-${boysLevel}`);
+    }
+
+    details.addEventListener("toggle", () => {
+      if (details.open) openRounds.add(r.id);
+      else openRounds.delete(r.id);
+    });
 
     const summary = document.createElement("summary");
     summary.className = "golf-round-summary";
 
-    // Header row inside summary
     const header = document.createElement("div");
     header.className = "golf-round-head";
 
@@ -152,7 +274,7 @@ function renderGolf(state, store){
 
     summary.appendChild(header);
 
-    // Body (expanded content)
+    // Body
     const body = document.createElement("div");
     body.className = "golf-round-body";
 
@@ -212,6 +334,7 @@ function renderGolf(state, store){
         s.golf.rounds = (s.golf.rounds || []).filter(x => x.id !== r.id);
         return s;
       });
+      openRounds.delete(r.id);
     });
 
     actions.appendChild(del);
@@ -219,89 +342,12 @@ function renderGolf(state, store){
     body.appendChild(grid);
     body.appendChild(actions);
 
-    details.appendChild(summary); // summary must be first child
+    details.appendChild(summary);
     details.appendChild(body);
 
     li.appendChild(details);
     ul.appendChild(li);
   });
-   applyScrollCap(ul, 5);
-}
 
-
-export function initGolf(store){
-  const btnAdd = el("btnAddGolfRound");
-
-  // Toggle listeners
-  const r1 = document.getElementById("golfPartnerMaddie");
-  const r2 = document.getElementById("golfPartnerBoys");
-  if (r1) r1.addEventListener("change", syncPartnerUI);
-  if (r2) r2.addEventListener("change", syncPartnerUI);
-
-  // Add round
-  if (btnAdd){
-    btnAdd.addEventListener("click", () => {
-      const course = (el("golfCourse")?.value || "").trim();
-      const price = numOrNull(el("golfPrice")?.value);
-
-      const partner = getPartnerChoice();
-
-      const jack = {
-        score: numOrNull(el("golfScoreJack")?.value),
-        rating: numOrNull(el("golfRatingJack")?.value),
-      };
-
-      const maddie = {
-        score: numOrNull(el("golfScoreMaddie")?.value),
-        rating: numOrNull(el("golfRatingMaddie")?.value),
-      };
-
-      const boys = {
-        score: numOrNull(el("golfScoreBoys")?.value),
-        rating: numOrNull(el("golfRatingBoys")?.value),
-      };
-
-      if (!course) return;
-
-      store.update((s) => {
-        s.golf = s.golf || { rounds: [] };
-
-        const round = normalizeRound({
-          id: crypto.randomUUID(),
-          createdAt: new Date().toISOString(),
-          course,
-          price,
-          partner,
-          maddiePlayed: partner === "maddie",
-          players: {
-            jack,
-            maddie,
-            boys,
-          },
-        });
-
-        s.golf.rounds.unshift(round);
-        return s;
-      });
-
-      // Clear inputs after save
-      el("golfCourse").value = "";
-      el("golfPrice").value = "";
-      el("golfScoreJack").value = "";
-      el("golfRatingJack").value = "";
-
-      el("golfScoreMaddie").value = "";
-      el("golfRatingMaddie").value = "";
-      el("golfScoreBoys").value = "";
-      el("golfRatingBoys").value = "";
-
-      syncPartnerUI();
-    });
-  }
-
-  // Initial sync so the correct row is visible
-  syncPartnerUI();
-
-  // Return renderer
-  return (state) => renderGolf(state, store);
+  applyScrollCap(ul, 5);
 }

@@ -112,4 +112,39 @@ a:hover{ text-decoration: underline; }
   font-size: 13px;
 }
 
+*{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(231,238,247,0.28) transparent;
+}
 
+/* WebKit (Chrome/Edge/Safari) */
+*::-webkit-scrollbar{
+  width: 10px;           /* overall gutter */
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track{
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb{
+  background-color: rgba(231,238,247,0.22);
+  border-radius: 999px;
+
+  /* Creates "floating" thumb look, like Chrome */
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover{
+  background-color: rgba(231,238,247,0.34);
+}
+
+*::-webkit-scrollbar-thumb:active{
+  background-color: rgba(231,238,247,0.46);
+}
+
+/* Optional: make scrollbars extra subtle on your dark cards */
+.card *{
+  scrollbar-color: rgba(231,238,247,0.24) transparent; /* Firefox override */
+}

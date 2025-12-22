@@ -61,16 +61,22 @@ export function initLinks(store){
     ul.innerHTML = "";
 
     state.links.forEach((link, i) => {
-      const li = document.createElement("li");
+    const li = document.createElement("li");
+      // Use the same “pill row” styling as Projects (so the Remove button is inside the pill)
+      li.className = "item";
+
+      const left = document.createElement("div");
+      left.className = "item-left";
 
       const a = document.createElement("a");
       a.href = sanitizeUrl(link.url);
       a.textContent = link.label || link.url || "Link";
       a.target = "_blank";
       a.rel = "noopener noreferrer";
+      a.className = "title quick-link"; // title font + our quick-link hover underline
 
       const del = document.createElement("button");
-      del.className = "icon-btn";
+      del.className = "icon-btn icon-btn-sm"; // matches the small Delete button vibe
       del.type = "button";
       del.textContent = "Remove";
       del.addEventListener("click", () => {
@@ -80,7 +86,8 @@ export function initLinks(store){
         });
       });
 
-      li.appendChild(a);
+      left.appendChild(a);
+      li.appendChild(left);
       li.appendChild(del);
       ul.appendChild(li);
     });

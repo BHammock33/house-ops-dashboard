@@ -1,58 +1,40 @@
-/* features-golf.css (cleaned + synced to current Blade + golf.js)
-   - Add round editor is a <details id="golfAddManager"> chip
-   - Golf rounds render as: <li class="golf-round"><details class="golf-round-details">...</details></li>
+/* features-golf.v3.css
+   - Add round button under hint toggles the add form.
+   - Rounds list renders as collapsible <details> items with summary.
+   - List scroll caps after 5 items (JS adds .is-scroll + max-height).
 */
 
-/* ---------- Add round: details chip (matches Links pattern) ---------- */
-#golfAddManager.card{
-  width: min(640px, 100%);
-  margin-left: auto;
-  margin-right: 0;
-  padding: 12px;
-}
-
-#golfAddManager:not([open]){
-  width: fit-content;
-  margin-left: auto;
-  margin-right: 0;
-
-  padding: 0;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-#golfAddManager[open]{
-  border: 1px solid rgba(231,238,247,0.12);
-  border-radius: 18px;
-  background: rgba(255,255,255,0.02);
-}
-
-#golfAddManager > summary.icon-btn{
+/* ---------- Add round toggle button ---------- */
+#golfCard > #btnAddGolfRound{
   display: block;
   width: fit-content;
   margin-left: auto;
   margin-right: 0;
-  padding: 6px 10px;
-  font-size: 12px;
-  border-radius: 999px;
-  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+/* Hide the add form until "Add round" is clicked */
+#golfCard #golfAdd{
+  display: none;
+}
+
+#golfCard #golfAdd.is-open{
+  display: block;
 }
 
 /* ---------- Add round: form layout ---------- */
 .golf-add-actions{
   display: flex;
   justify-content: flex-end;
+  margin-top: 12px;
 }
 
 .golf-add-top{
   display: grid;
   gap: 10px;
   align-items: end;
-
-  /* Fits inside a 1/3-width dashboard card nicely */
   grid-template-columns: minmax(0, 1fr) 170px;
-
   grid-template-areas:
     "course price"
     "partner partner";
@@ -141,18 +123,71 @@
   gap: 10px;
 }
 
-/* ---------- Round card (collapsible <details>) ---------- */
+.golf-rounds.is-scroll{
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding-right: 4px;
+}
+
 .golf-round{
   padding: 0;
   border: 0;
   background: transparent;
 }
 
+/* ---------- Round card (collapsible <details>) ---------- */
 .golf-round-details{
   border: 1px solid rgba(231,238,247,0.12);
   border-radius: 16px;
   background: rgba(255,255,255,0.02);
 }
+
+/* ---------- "The Boys" streak heat ----------
+   JS adds .boys-streak-1/2/3 on both .golf-round and .golf-round-details.
+   Level 0 intentionally uses the normal base styling.
+*/
+.golf-round-details.boys-streak-1{
+  border-color: rgba(245, 197, 66, 0.42);
+  background: linear-gradient(180deg,
+    rgba(245, 197, 66, 0.10),
+    rgba(255,255,255,0.02)
+  );
+  box-shadow:
+    0 8px 30px rgba(0,0,0,0.22),
+    0 0 0 1px rgba(245, 197, 66, 0.14);
+}
+
+.golf-round-details.boys-streak-2{
+  border-color: rgba(255, 159, 67, 0.50);
+  background: linear-gradient(180deg,
+    rgba(255, 159, 67, 0.14),
+    rgba(255,255,255,0.02)
+  );
+  box-shadow:
+    0 8px 30px rgba(0,0,0,0.22),
+    0 0 0 1px rgba(255, 159, 67, 0.18);
+}
+
+.golf-round-details.boys-streak-3{
+  border-color: rgba(255, 77, 77, 0.62);
+  background: linear-gradient(180deg,
+    rgba(255, 77, 77, 0.18),
+    rgba(255,255,255,0.02)
+  );
+  box-shadow:
+    0 8px 30px rgba(0,0,0,0.22),
+    0 0 0 1px rgba(255, 77, 77, 0.22);
+}
+
+/* Make the whole list item feel "hot" too (requested: golf-round + golf-round-details) */
+.golf-round.boys-streak-1{ filter: drop-shadow(0 0 10px rgba(245, 197, 66, 0.10)); }
+.golf-round.boys-streak-2{ filter: drop-shadow(0 0 12px rgba(255, 159, 67, 0.14)); }
+.golf-round.boys-streak-3{ filter: drop-shadow(0 0 14px rgba(255, 77, 77, 0.18)); }
+
+/* Nudge the summary meta text to match the vibe */
+.golf-round-details.boys-streak-1 .golf-round-meta{ color: rgba(245, 197, 66, 0.95); }
+.golf-round-details.boys-streak-2 .golf-round-meta{ color: rgba(255, 159, 67, 0.95); }
+.golf-round-details.boys-streak-3 .golf-round-meta{ color: rgba(255, 77, 77, 0.95); }
 
 .golf-round-summary{
   cursor: pointer;
@@ -160,7 +195,6 @@
   list-style: none;
 }
 
-/* Remove default marker so only our chevron shows */
 .golf-round-summary::-webkit-details-marker{ display: none; }
 .golf-round-summary::marker{ content: ""; }
 
@@ -253,10 +287,4 @@
     white-space: normal;
     max-width: none;
   }
-}
-
-.golf-rounds.is-scroll{
-  overflow-y: auto;
-  scrollbar-gutter: stable;
-  padding-right: 4px;
 }

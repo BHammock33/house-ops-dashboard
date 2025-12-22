@@ -64,7 +64,31 @@ export function initProjects(store){
     if (!ul) return;
     ul.innerHTML = "";
 
-    const list = [...state.projects].sort((a,b) => (a.done === b.done) ? 0 : (a.done ? 1 : -1));
+    const today = new Date();
+today.setHours(0, 0, 0, 0);
+const todayTime = today.getTime();
+
+const dueTime = (due) => {
+  // No due date goes to the bottom.
+  if (!due) return Number.POSITIVE_INFINITY;
+
+  // `due` is "YYYY-MM-DD" from <input type="date">.
+  const t = new Date(due + "T00:00:00").getTime();
+  return Number.isFinite(t) ? t : Number.POSITIVE_INFINITY;
+};
+
+const list = [...state.projects].sort((a, b) => {
+  // Keep incomplete projects above completed projects.
+  if (a.done !== b.done) return a.done ? 1 : -1;
+
+  // Then sort by due date: closest/earliest relative to today goes first.
+  // Overdue items naturally float to the top because their date is earlier.
+  const at = dueTime(a.due);
+  const bt = dueTime(b.due);
+
+  if (at === bt) return 0;
+  return at - bt;
+});
     list.forEach((p) => {
       const meta = p.due ? ("Due " + formatDue(p.due)) : "";
       ul.appendChild(itemRow({
