@@ -1,14 +1,27 @@
 <!doctype html>
 <html lang="en" data-user-id="{{ auth()->id() ?? 'guest' }}">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>House Ops</title>
+<header class="hero" style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+  <div>
+    <h1 id="siteTitle">Liebes Home Base</h1>
+    <p class="sub" id="siteSubtitle"></p>
+  </div>
 
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+  @auth
+    <form method="POST" action="{{ route('logout') }}" style="margin:0;">
+      @csrf
+      <button
+        type="submit"
+        class="icon-btn"
+        style="padding:6px 10px; font-size:12px; line-height:1; white-space:nowrap;"
+        aria-label="Log out"
+        title="Log out"
+      >
+        Logout
+      </button>
+    </form>
+  @endauth
+</header>
 
-  <link rel="stylesheet" href="{{ secure_asset('house-ops-assets/style.css') }}" />
-</head>
 <body>
   <main class="wrap">
     <header class="hero">
