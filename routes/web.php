@@ -2,8 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HouseOpsStateController;
-
+use App\Http\Controllers\HomebaseStateController;
 
 Route::get('/', function () {
     return redirect('/house-ops');
@@ -21,9 +20,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware('auth')->prefix('api')->group(function () {
-    Route::get('/house-ops/state', [HouseOpsStateController::class, 'show']);
-    Route::put('/house-ops/state', [HouseOpsStateController::class, 'update']);
-});
 
+Route::middleware('auth')->group(function () {
+    Route::get('/house-ops/state', [HomebaseStateController::class, 'show']);
+    Route::put('/house-ops/state', [HomebaseStateController::class, 'update']);
+});
 require __DIR__.'/auth.php';

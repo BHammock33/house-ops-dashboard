@@ -244,7 +244,7 @@
     </section>
 
     <footer class="footer">
-      <p>Built to be boring in the best way.</p>
+      <p>The System is only as good as we are. Merry Christmas! Bennett Hammock&trade;</p>
     </footer>
   </main>
 
