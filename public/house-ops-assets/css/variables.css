@@ -135,3 +135,86 @@ html[data-theme="olive-woods"]{
 
   --ok: #2f7a4a;
 }
+html[data-theme="tech"]{
+  --theme-name: "tech-mode";
+
+  /* Keep your original dark vibe */
+  --bg: #0b1220;
+  --text: rgba(231,238,247,0.92);
+  --muted: rgba(231,238,247,0.70);
+  --accent: #7dd3fc; /* light tech blue */
+
+  --border: rgba(231,238,247,0.16);
+
+  --hero-bg: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  --card-bg: rgba(13, 18, 29, 0.72);
+
+  --wash-1: rgba(125, 211, 252, 0.18);
+  --wash-2: rgba(167, 139, 250, 0.10);
+
+  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+
+  --scroll-thumb: rgba(231,238,247,0.22);
+  --scroll-thumb-hover: rgba(231,238,247,0.34);
+
+  --ok: #22c55e;
+  --danger: #ef4444;
+}
+html[data-theme="cobalt-sky"]{
+  --theme-name: "cobalt-sky";
+
+  --c1: #0047AB; /* cobalt */
+  --c2: #000080; /* navy */
+  --c3: #82C8E5; /* sky */
+  --c4: #6D8196; /* slate */
+
+  /* Tokens (light UI with cobalt accent) */
+  --bg: #EAF4FB; /* derived from c3 */
+  --text: #0b1a2a;
+  --muted: rgba(11, 26, 42, 0.68);
+  --accent: var(--c1);
+
+  --border: rgba(13, 35, 60, 0.14);
+
+  --hero-bg: rgba(130, 200, 229, 0.32);
+  --card-bg: rgba(130, 200, 229, 0.22);
+
+  --wash-1: rgba(0, 71, 171, 0.18);
+  --wash-2: rgba(109, 129, 150, 0.22);
+
+  --shadow: 0 10px 30px rgba(0,0,0,0.12);
+
+  --scroll-thumb: rgba(11, 26, 42, 0.18);
+  --scroll-thumb-hover: rgba(11, 26, 42, 0.28);
+
+  --ok: #1aa56a;
+}
+html[data-theme="harbor-haze"]{
+  --theme-name: "harbor-haze";
+
+  --c1: #909EAE; /* pewter */
+  --c2: #5C8DC5; /* harbor blue */
+  --c3: #AD9E90; /* taupe */
+  --c4: #736F60; /* olive-gray */
+
+  /* Tokens (calm neutral UI with blue accent) */
+  --bg: #F2F3F0; /* derived */
+  --text: #2a2d2f;
+  --muted: rgba(42, 45, 47, 0.70);
+  --accent: var(--c2);
+
+  --border: rgba(42, 45, 47, 0.14);
+
+  --hero-bg: rgba(144, 158, 174, 0.22);
+  --card-bg: rgba(173, 158, 144, 0.20);
+
+  --wash-1: rgba(92, 141, 197, 0.20);
+  --wash-2: rgba(173, 158, 144, 0.22);
+
+  --shadow: 0 10px 30px rgba(0,0,0,0.10);
+
+  --scroll-thumb: rgba(42, 45, 47, 0.18);
+  --scroll-thumb-hover: rgba(42, 45, 47, 0.28);
+
+  --ok: #2f7a4a;
+}

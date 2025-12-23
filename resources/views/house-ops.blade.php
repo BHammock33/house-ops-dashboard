@@ -24,6 +24,9 @@
     <option value="pistachio">Pistachio Dream</option>
     <option value="blue-mist">Blue Mist</option>
     <option value="olive-woods">Olive Woods</option>
+    <option value="tech">Tech mode</option>
+    <option value="cobalt-sky">Cobalt Sky</option>
+    <option value="harbor-haze">Harbor Haze</option>
   </select>
 
   @auth
