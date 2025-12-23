@@ -23,12 +23,12 @@
   --border: rgba(212, 163, 115, 0.38);
 
   /* Surfaces */
-  --hero-bg: rgba(233, 237, 201, 0.55);  /* based on c2 */
-  --card-bg: rgba(250, 237, 205, 0.85);  /* based on c4 */
+  --hero-bg: rgba(233, 237, 201, 0.55);
+  --card-bg: rgba(250, 237, 205, 0.85);
 
   /* Background washes */
-  --wash-1: rgba(204, 213, 174, 0.55);   /* c1 */
-  --wash-2: rgba(212, 163, 115, 0.35);   /* c5 */
+  --wash-1: rgba(204, 213, 174, 0.55);
+  --wash-2: rgba(212, 163, 115, 0.35);
 
   /* Shadows */
   --shadow: 0 10px 30px rgba(0,0,0,0.12);
@@ -40,13 +40,46 @@
   /* Status */
   --danger: #b23a48;
   --ok: #2f7a4a;
-  /* Buttons */
---btn-bg: rgba(233, 237, 201, 0.70);
---btn-bg-hover: rgba(233, 237, 201, 0.95);
---btn-border-hover: rgba(212, 163, 115, 0.55);
 
-/* List items */
---item-bg: rgba(254, 250, 224, 0.55);
+  /* Buttons */
+  --btn-bg: rgba(233, 237, 201, 0.70);
+  --btn-bg-hover: rgba(233, 237, 201, 0.95);
+  --btn-border-hover: rgba(212, 163, 115, 0.55);
+
+  /* List items */
+  --item-bg: rgba(254, 250, 224, 0.55);
+
+  /* Derived tokens (auto adapt via --text/--accent) */
+  --border-soft: color-mix(in srgb, var(--text) 12%, transparent);
+  --divider: color-mix(in srgb, var(--text) 10%, transparent);
+
+  /* Inset surface used inside cards */
+  --surface-inset: color-mix(in srgb, var(--item-bg) 72%, var(--bg) 28%);
+
+  /* Panels (details dropdowns) */
+  --panel-bg: color-mix(in srgb, var(--card-bg) 92%, var(--bg) 8%);
+  --panel-border: var(--border-soft);
+  --panel-shadow: 0 18px 50px rgba(0,0,0,0.18);
+
+  /* Inputs (non-tech themes use a soft inset by default) */
+  --input-bg: var(--surface-inset);
+  --input-border: var(--border-soft);
+  --input-border-focus: color-mix(in srgb, var(--accent) 65%, transparent);
+  --input-glow: color-mix(in srgb, var(--accent) 22%, transparent);
+  --placeholder: color-mix(in srgb, var(--muted) 85%, transparent);
+
+  /* Chips */
+  --chip-bg: var(--surface-inset);
+  --chip-border: var(--border-soft);
+  --chip-text: var(--text);
+
+  /* Segmented controls */
+  --seg-bg: color-mix(in srgb, var(--surface-inset) 65%, transparent);
+  --seg-border: var(--border-soft);
+  --seg-hover-bg: color-mix(in srgb, var(--seg-bg) 88%, var(--accent) 12%);
+  --seg-hover-border: color-mix(in srgb, var(--accent) 22%, transparent);
+  --seg-active-bg: color-mix(in srgb, var(--accent) 16%, transparent);
+  --seg-active-border: color-mix(in srgb, var(--accent) 42%, transparent);
 }
 
 /* Theme: Pistachio Dream */
@@ -57,7 +90,7 @@ html[data-theme="pistachio"]{
   --c2: #E3F0A3;
   --c3: #BADBA2;
   --c4: #42D674;
-  --c5: #42D674; /* not provided, mirror accent */
+  --c5: #42D674;
 
   --bg: var(--c2);
   --text: #1f2b1f;
@@ -78,9 +111,15 @@ html[data-theme="pistachio"]{
   --scroll-thumb-hover: rgba(31, 43, 31, 0.28);
 
   --ok: var(--c4);
+
+  --btn-bg: rgba(128, 239, 128, 0.22);
+  --btn-bg-hover: rgba(128, 239, 128, 0.32);
+  --btn-border-hover: rgba(66, 214, 116, 0.45);
+
+  --item-bg: rgba(227, 240, 163, 0.38);
 }
 
-/* Theme: 6A89A7 / BDDDFC / 88BDF2 / 384959 */
+/* Theme: Blue Mist */
 html[data-theme="blue-mist"]{
   --theme-name: "blue-mist";
 
@@ -90,15 +129,14 @@ html[data-theme="blue-mist"]{
   --c4: #384959;
   --c5: #6A89A7;
 
-  /* Use the lightest as background, the deep slate as text */
-  --bg: #EAF3FD; /* derived for comfort */
+  --bg: #EAF3FD;
   --text: #384959;
   --muted: rgba(56, 73, 89, 0.70);
   --accent: #6A89A7;
 
   --border: rgba(56, 73, 89, 0.18);
 
-  --hero-bg: rgba(189, 221, 252, 0.60);  /* close to BDDDFC */
+  --hero-bg: rgba(189, 221, 252, 0.60);
   --card-bg: rgba(189, 221, 252, 0.42);
 
   --wash-1: rgba(136, 189, 242, 0.35);
@@ -109,10 +147,14 @@ html[data-theme="blue-mist"]{
   --scroll-thumb: rgba(56, 73, 89, 0.18);
   --scroll-thumb-hover: rgba(56, 73, 89, 0.28);
 
-  --ok: #2f7a4a;
+  --btn-bg: rgba(189, 221, 252, 0.55);
+  --btn-bg-hover: rgba(189, 221, 252, 0.72);
+  --btn-border-hover: rgba(106, 137, 167, 0.55);
+
+  --item-bg: rgba(189, 221, 252, 0.40);
 }
 
-/* Theme: 636B2F / BAC095 / D4DE95 / 3D4127 */
+/* Theme: Olive Woods */
 html[data-theme="olive-woods"]{
   --theme-name: "olive-woods";
 
@@ -122,7 +164,7 @@ html[data-theme="olive-woods"]{
   --c4: #3D4127;
   --c5: #636B2F;
 
-  --bg: #F4F6E4; /* derived for comfort */
+  --bg: #F4F6E4;
   --text: #3D4127;
   --muted: rgba(61, 65, 39, 0.70);
   --accent: #636B2F;
@@ -140,23 +182,21 @@ html[data-theme="olive-woods"]{
   --scroll-thumb: rgba(61, 65, 39, 0.18);
   --scroll-thumb-hover: rgba(61, 65, 39, 0.28);
 
-  --ok: #2f7a4a;
+  --btn-bg: rgba(212, 222, 149, 0.40);
+  --btn-bg-hover: rgba(212, 222, 149, 0.58);
+  --btn-border-hover: rgba(99, 107, 47, 0.55);
+
+  --item-bg: rgba(186, 192, 149, 0.40);
 }
+
+/* Theme: Tech mode */
 html[data-theme="tech"]{
   --theme-name: "tech-mode";
 
-  /* Keep your original dark vibe */
   --bg: #0b1220;
   --text: rgba(231,238,247,0.92);
   --muted: rgba(231,238,247,0.70);
-  --accent: #7dd3fc; /* light tech blue */
-
-   /* Input surfaces (tech mode) */
-  --input-bg: rgba(22, 32, 48, 0.85);      /* deep blue-gray */
-  --input-border: rgba(148, 163, 184, 0.22); /* slate */
-  --input-border-focus: rgba(125, 211, 252, 0.70); /* sky */
-  --input-glow: rgba(125, 211, 252, 0.22);
-  --placeholder: rgba(231,238,247,0.55);
+  --accent: #7dd3fc;
 
   --border: rgba(231,238,247,0.16);
 
@@ -171,27 +211,36 @@ html[data-theme="tech"]{
   --scroll-thumb: rgba(231,238,247,0.22);
   --scroll-thumb-hover: rgba(231,238,247,0.34);
 
-  /* Buttons */
---btn-bg: rgba(22, 32, 48, 0.70);
---btn-bg-hover: rgba(22, 32, 48, 0.92);
---btn-border-hover: rgba(125, 211, 252, 0.35);
+  --btn-bg: rgba(22, 32, 48, 0.70);
+  --btn-bg-hover: rgba(22, 32, 48, 0.92);
+  --btn-border-hover: rgba(125, 211, 252, 0.35);
 
-/* List items */
---item-bg: rgba(255, 255, 255, 0.03);
+  --item-bg: rgba(255, 255, 255, 0.03);
+
+  --input-bg: rgba(22, 32, 48, 0.85);
+  --input-border: rgba(148, 163, 184, 0.22);
+  --input-border-focus: rgba(125, 211, 252, 0.70);
+  --input-glow: rgba(125, 211, 252, 0.22);
+  --placeholder: rgba(231,238,247,0.55);
+
+  --panel-bg: rgba(13, 18, 29, 0.96);
+    --panel-border: rgba(148, 163, 184, 0.22);
+  --panel-shadow: 0 18px 50px rgba(0,0,0,0.55);
 
   --ok: #22c55e;
   --danger: #ef4444;
 }
+
+/* Theme: Cobalt Sky */
 html[data-theme="cobalt-sky"]{
   --theme-name: "cobalt-sky";
 
-  --c1: #0047AB; /* cobalt */
-  --c2: #000080; /* navy */
-  --c3: #82C8E5; /* sky */
-  --c4: #6D8196; /* slate */
+  --c1: #0047AB;
+  --c2: #000080;
+  --c3: #82C8E5;
+  --c4: #6D8196;
 
-  /* Tokens (light UI with cobalt accent) */
-  --bg: #EAF4FB; /* derived from c3 */
+  --bg: #EAF4FB;
   --text: #0b1a2a;
   --muted: rgba(11, 26, 42, 0.68);
   --accent: var(--c1);
@@ -210,17 +259,24 @@ html[data-theme="cobalt-sky"]{
   --scroll-thumb-hover: rgba(11, 26, 42, 0.28);
 
   --ok: #1aa56a;
+
+  --btn-bg: rgba(130, 200, 229, 0.34);
+  --btn-bg-hover: rgba(130, 200, 229, 0.48);
+  --btn-border-hover: rgba(0, 71, 171, 0.45);
+
+  --item-bg: rgba(130, 200, 229, 0.22);
 }
+
+/* Theme: Harbor Haze */
 html[data-theme="harbor-haze"]{
   --theme-name: "harbor-haze";
 
-  --c1: #909EAE; /* pewter */
-  --c2: #5C8DC5; /* harbor blue */
-  --c3: #AD9E90; /* taupe */
-  --c4: #736F60; /* olive-gray */
+  --c1: #909EAE;
+  --c2: #5C8DC5;
+  --c3: #AD9E90;
+  --c4: #736F60;
 
-  /* Tokens (calm neutral UI with blue accent) */
-  --bg: #F2F3F0; /* derived */
+  --bg: #F2F3F0;
   --text: #2a2d2f;
   --muted: rgba(42, 45, 47, 0.70);
   --accent: var(--c2);
@@ -239,4 +295,10 @@ html[data-theme="harbor-haze"]{
   --scroll-thumb-hover: rgba(42, 45, 47, 0.28);
 
   --ok: #2f7a4a;
+
+  --btn-bg: rgba(144, 158, 174, 0.22);
+  --btn-bg-hover: rgba(144, 158, 174, 0.34);
+  --btn-border-hover: rgba(92, 141, 197, 0.45);
+
+  --item-bg: rgba(173, 158, 144, 0.20);
 }

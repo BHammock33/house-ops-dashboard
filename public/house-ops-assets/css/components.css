@@ -24,7 +24,7 @@ input[type="radio"]{
 
 input::placeholder,
 textarea::placeholder{
-  color: var(--placeholder, rgba(31,43,31,0.55));
+  color: var(--placeholder);
 }
 
 
@@ -32,13 +32,14 @@ input:focus,
 textarea:focus,
 select:focus{
   border-color: var(--input-border-focus, var(--accent));
-  box-shadow: 0 0 0 3px var(--input-glow, rgba(66,214,116,0.22));
+  box-shadow: 0 0 0 3px var(--input-glow);
 }
 
 /* Button pill used across the UI */
+/* Button pill used across the UI */
 .icon-btn{
   appearance: none;
-  background: var(--btn-bg);
+  background: var(--btn-bg, rgba(233, 237, 201, 0.70));
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 999px;
@@ -49,8 +50,8 @@ select:focus{
 }
 
 .icon-btn:hover{
-  background: var(--btn-bg-hover);
-  border-color: var(--btn-border-hover);
+  background: var(--btn-bg-hover, rgba(233, 237, 201, 0.95));
+  border-color: var(--btn-border-hover, rgba(212, 163, 115, 0.55));
 }
 
 .icon-btn:active{ transform: translateY(1px); }
@@ -69,6 +70,7 @@ select:focus{
   gap: 10px;
 }
 
+/* Item rows (projects/reading/meals/links) */
 .item{
   display: flex;
   justify-content: space-between;
@@ -77,7 +79,7 @@ select:focus{
   padding: 12px;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: var(--item-bg);
+  background: var(--item-bg, rgba(254, 250, 224, 0.55));
 }
 
 .item-left{

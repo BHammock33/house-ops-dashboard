@@ -54,10 +54,7 @@
 
   padding: 12px;
   border-radius: 18px;
-  border: 1px solid rgba(231,238,247,0.14);
-
+  border: 1px solid var(--panel-border);
   /* Make it fully opaque so the link list underneath can't show through */
-  background: #0a0e12;
-
-  box-shadow: 0 18px 50px rgba(0,0,0,0.55);
-}
+  background: var(--panel-bg);
+  box-shadow: var(--panel-shadow);}
