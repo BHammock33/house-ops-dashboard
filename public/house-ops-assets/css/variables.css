@@ -144,6 +144,13 @@ html[data-theme="tech"]{
   --muted: rgba(231,238,247,0.70);
   --accent: #7dd3fc; /* light tech blue */
 
+   /* Input surfaces (tech mode) */
+  --input-bg: rgba(22, 32, 48, 0.85);      /* deep blue-gray */
+  --input-border: rgba(148, 163, 184, 0.22); /* slate */
+  --input-border-focus: rgba(125, 211, 252, 0.70); /* sky */
+  --input-glow: rgba(125, 211, 252, 0.22);
+  --placeholder: rgba(231,238,247,0.55);
+
   --border: rgba(231,238,247,0.16);
 
   --hero-bg: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
