@@ -1,23 +1,35 @@
 /* House Ops Dashboard - Base styles (layout + surfaces) */
 :root{
-  --bg: #0b0f14;
-  --card: #121a24;
-  --text: #e7eef7;
-  --muted: #a7b4c3;
-  --accent: #6ee7ff;
-  --border: rgba(231,238,247,0.10);
-  --danger: #ff6b6b;
-  --ok: #6bff95;
+  /* Golden Summer Fields palette */
+  --g1: #CCD5AE; /* soft green */
+  --g2: #E9EDC9; /* pale green */
+  --g3: #FEFAE0; /* cream */
+  --g4: #FAEDCD; /* sand */
+  --g5: #D4A373; /* warm brown */
+
+  /* App theme tokens */
+  --bg: var(--g3);
+  --card: var(--g4);
+  --text: #2f2a21;
+  --muted: #6b624f;
+  --accent: var(--g5);
+  --border: rgba(212, 163, 115, 0.38);
+
+  /* Status (not in your palette, but needed for UI meaning) */
+  --danger: #b23a48;
+  --ok: #2f7a4a;
 }
+
 
 *{ box-sizing: border-box; }
 
 body{
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  background: radial-gradient(1200px 900px at 20% -10%, rgba(110,231,255,0.10), transparent 55%),
-              radial-gradient(900px 700px at 85% 0%, rgba(110,231,255,0.07), transparent 50%),
-              var(--bg);
+ background:
+    radial-gradient(1200px 900px at 20% -10%, rgba(204,213,174,0.55), transparent 55%),
+    radial-gradient(900px 700px at 85% 0%, rgba(212,163,115,0.35), transparent 50%),
+    var(--bg);
   color: var(--text);
   line-height: 1.45;
 }
@@ -86,10 +98,10 @@ a:hover{ text-decoration: underline; }
 
 .card{
   border: 1px solid var(--border);
-  background: rgba(18,26,36,0.75);
+  background: rgba(250, 237, 205, 0.85); /* based on #FAEDCD */
   border-radius: 18px;
   padding: 18px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.22);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
   backdrop-filter: blur(8px);
 }
 

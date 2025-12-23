@@ -5,8 +5,8 @@ textarea{
   width: 100%;
   padding: 10px 12px;
   border-radius: 14px;
-  border: 1px solid rgba(231,238,247,0.12);
-  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  background: rgba(254, 250, 224, 0.65); /* based on #FEFAE0 */
   color: var(--text);
   outline: none;
 }
@@ -21,18 +21,20 @@ input[type="radio"]{
   border: 0;
 }
 
-input::placeholder, textarea::placeholder{ color: rgba(167,180,195,0.75); }
+input::placeholder, textarea::placeholder{
+  color: rgba(107, 98, 79, 0.70); /* muted */
+}
 
 input:focus, textarea:focus{
-  border-color: rgba(110,231,255,0.55);
-  box-shadow: 0 0 0 3px rgba(110,231,255,0.12);
+  border-color: rgba(212, 163, 115, 0.85); /* accent */
+  box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.20);
 }
 
 /* Button pill used across the UI */
 .icon-btn{
   appearance: none;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(231,238,247,0.12);
+  background: rgba(233, 237, 201, 0.70); /* based on #E9EDC9 */
+  border: 1px solid var(--border);
   color: var(--text);
   border-radius: 999px;
   padding: 8px 12px;
@@ -42,8 +44,8 @@ input:focus, textarea:focus{
 }
 
 .icon-btn:hover{
-  background: rgba(255,255,255,0.06);
-  border-color: rgba(231,238,247,0.18);
+  background: rgba(233, 237, 201, 0.95);
+  border-color: rgba(212, 163, 115, 0.55);
 }
 
 .icon-btn:active{ transform: translateY(1px); }
@@ -69,9 +71,9 @@ input:focus, textarea:focus{
   align-items: center;
   gap: 12px;
   padding: 12px;
-  border: 1px solid rgba(231,238,247,0.12);
+ border: 1px solid var(--border);
   border-radius: 14px;
-  background: rgba(255,255,255,0.03);
+  background: rgba(254, 250, 224, 0.55);
 }
 
 .item-left{
