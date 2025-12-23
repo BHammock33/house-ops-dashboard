@@ -37,7 +37,19 @@ a:hover{ text-decoration: underline; }
   font-size: 28px;
   letter-spacing: 0.2px;
 }
-
+.hero label.meta{
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+  flex: 0 0 auto;
+}
+.hero-actions{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
 .sub{
   margin: 8px 0 0;
   color: var(--muted);

@@ -17,7 +17,7 @@
     <p class="sub" id="siteSubtitle"></p>
   </div>
 
-  <div style="display:flex; align-items:center; gap:10px;">
+<div class="hero-actions">
   <label class="meta" for="themeSelect" style="margin:0; font-size:12px;">Theme</label>
   <select id="themeSelect" class="icon-btn" style="padding:6px 10px; font-size:12px;">
     <option value="default">Golden Summer Fields</option>

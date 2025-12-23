@@ -29,6 +29,22 @@
     grid-template-columns: 1fr;
   }
 }
+@media (max-width: 720px){
+  .quick-links{ padding-bottom: 92px; }
+}
+@media (max-width: 520px){
+  .quick-links{
+    padding-bottom: 0;
+  }
+    .quick-links-actions{
+    position: static;
+    margin-top: 12px;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+  }
+}
 
 #linksList .quick-link{
   color: var(--text);
