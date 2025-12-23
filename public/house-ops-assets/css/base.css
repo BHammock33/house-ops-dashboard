@@ -1,34 +1,11 @@
-/* House Ops Dashboard - Base styles (layout + surfaces) */
-:root{
-  /* Golden Summer Fields palette */
-  --g1: #CCD5AE; /* soft green */
-  --g2: #E9EDC9; /* pale green */
-  --g3: #FEFAE0; /* cream */
-  --g4: #FAEDCD; /* sand */
-  --g5: #D4A373; /* warm brown */
-
-  /* App theme tokens */
-  --bg: var(--g3);
-  --card: var(--g4);
-  --text: #2f2a21;
-  --muted: #6b624f;
-  --accent: var(--g5);
-  --border: rgba(212, 163, 115, 0.38);
-
-  /* Status (not in your palette, but needed for UI meaning) */
-  --danger: #b23a48;
-  --ok: #2f7a4a;
-}
-
-
 *{ box-sizing: border-box; }
 
 body{
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
  background:
-    radial-gradient(1200px 900px at 20% -10%, rgba(204,213,174,0.55), transparent 55%),
-    radial-gradient(900px 700px at 85% 0%, rgba(212,163,115,0.35), transparent 50%),
+    radial-gradient(1200px 900px at 20% -10%, var(--wash-1), transparent 55%),
+    radial-gradient(900px 700px at 85% 0%, var(--wash-2), transparent 50%),
     var(--bg);
   color: var(--text);
   line-height: 1.45;
@@ -50,7 +27,7 @@ a:hover{ text-decoration: underline; }
 .hero{
   padding: 22px;
   border: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  background: var(--hero-bg);
   border-radius: 18px;
   margin-bottom: 8px;
 }
@@ -98,10 +75,10 @@ a:hover{ text-decoration: underline; }
 
 .card{
   border: 1px solid var(--border);
-  background: rgba(250, 237, 205, 0.85); /* based on #FAEDCD */
+  background: var(--card-bg);
   border-radius: 18px;
   padding: 18px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(8px);
 }
 
@@ -126,7 +103,7 @@ a:hover{ text-decoration: underline; }
 
 *{
   scrollbar-width: thin;
-  scrollbar-color: rgba(231,238,247,0.28) transparent;
+  scrollbar-color: var(--scroll-thumb) transparent;
 }
 
 /* WebKit (Chrome/Edge/Safari) */
@@ -140,7 +117,7 @@ a:hover{ text-decoration: underline; }
 }
 
 *::-webkit-scrollbar-thumb{
-  background-color: rgba(231,238,247,0.22);
+  background-color: var(--scroll-thumb);
   border-radius: 999px;
 
   /* Creates "floating" thumb look, like Chrome */
@@ -149,14 +126,14 @@ a:hover{ text-decoration: underline; }
 }
 
 *::-webkit-scrollbar-thumb:hover{
-  background-color: rgba(231,238,247,0.34);
+  background-color: var(--scroll-thumb-hover);
 }
 
 *::-webkit-scrollbar-thumb:active{
-  background-color: rgba(231,238,247,0.46);
+  background-color: var(--scroll-thumb-hover);
 }
 
 /* Optional: make scrollbars extra subtle on your dark cards */
 .card *{
-  scrollbar-color: rgba(231,238,247,0.24) transparent; /* Firefox override */
+  scrollbar-color: var(--scroll-thumb) transparent;
 }

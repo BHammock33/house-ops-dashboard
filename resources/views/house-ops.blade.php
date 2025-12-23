@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-user-id="{{ auth()->id() ?? 'guest' }}">
+<html lang="en" data-theme="pistachio" data-user-id="{{ auth()->id() ?? 'guest' }}">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -17,6 +17,15 @@
     <p class="sub" id="siteSubtitle"></p>
   </div>
 
+  <div style="display:flex; align-items:center; gap:10px;">
+  <label class="meta" for="themeSelect" style="margin:0; font-size:12px;">Theme</label>
+  <select id="themeSelect" class="icon-btn" style="padding:6px 10px; font-size:12px;">
+    <option value="default">Golden Summer Fields</option>
+    <option value="pistachio">Pistachio Dream</option>
+    <option value="blue-mist">Blue Mist</option>
+    <option value="olive-woods">Olive Woods</option>
+  </select>
+
   @auth
     <form method="POST" action="{{ route('logout') }}" style="margin:0;">
       @csrf
@@ -31,6 +40,7 @@
       </button>
     </form>
   @endauth
+  </div>
 </header>
 
     <section class="grid">

@@ -12,6 +12,36 @@ import { initTools } from "./features/tools.js";
 
 const userId = document.documentElement.dataset.userId || "guest";
 
+function initThemePicker() {
+  const STORAGE_KEY = "houseOpsTheme";
+  const select = document.getElementById("themeSelect");
+  if (!select) return;
+
+  const applyTheme = (theme) => {
+    if (!theme || theme === "default") {
+      document.documentElement.removeAttribute("data-theme");
+      localStorage.removeItem(STORAGE_KEY);
+      select.value = "default";
+      return;
+    }
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem(STORAGE_KEY, theme);
+    select.value = theme;
+  };
+
+  // Load saved theme on page load
+  const saved = localStorage.getItem(STORAGE_KEY);
+  applyTheme(saved || "default");
+
+  // Persist on change
+  select.addEventListener("change", (e) => {
+    applyTheme(e.target.value);
+  });
+}
+
+// Call this once when your page boots
+initThemePicker();
+
 // Per-user local cache key (prevents “User B sees User A’s localStorage”)
 // Also lets us migrate the old global key one time.
 const storageKey = `${STORAGE_KEY}:${userId}`;

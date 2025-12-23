@@ -1,0 +1,137 @@
+/* variables.css
+   Theme tokens live here. Swap themes by changing <html data-theme="...">.
+   Example: <html lang="en" data-theme="pistachio">
+*/
+
+/* Default theme */
+:root{
+  --theme-name: "golden-summer-fields";
+
+  /* Core palette */
+  --c1: #CCD5AE;
+  --c2: #E9EDC9;
+  --c3: #FEFAE0;
+  --c4: #FAEDCD;
+  --c5: #D4A373;
+
+  /* App tokens */
+  --bg: var(--c3);
+  --text: #2f2a21;
+  --muted: #6b624f;
+  --accent: var(--c5);
+
+  --border: rgba(212, 163, 115, 0.38);
+
+  /* Surfaces */
+  --hero-bg: rgba(233, 237, 201, 0.55);  /* based on c2 */
+  --card-bg: rgba(250, 237, 205, 0.85);  /* based on c4 */
+
+  /* Background washes */
+  --wash-1: rgba(204, 213, 174, 0.55);   /* c1 */
+  --wash-2: rgba(212, 163, 115, 0.35);   /* c5 */
+
+  /* Shadows */
+  --shadow: 0 10px 30px rgba(0,0,0,0.12);
+
+  /* Scrollbars */
+  --scroll-thumb: rgba(47, 42, 33, 0.20);
+  --scroll-thumb-hover: rgba(47, 42, 33, 0.30);
+
+  /* Status */
+  --danger: #b23a48;
+  --ok: #2f7a4a;
+}
+
+/* Theme: Pistachio Dream */
+html[data-theme="pistachio"]{
+  --theme-name: "pistachio-dream";
+
+  --c1: #80EF80;
+  --c2: #E3F0A3;
+  --c3: #BADBA2;
+  --c4: #42D674;
+  --c5: #42D674; /* not provided, mirror accent */
+
+  --bg: var(--c2);
+  --text: #1f2b1f;
+  --muted: rgba(31, 43, 31, 0.70);
+  --accent: var(--c4);
+
+  --border: rgba(31, 43, 31, 0.14);
+
+  --hero-bg: rgba(227, 240, 163, 0.55);
+  --card-bg: rgba(186, 219, 162, 0.68);
+
+  --wash-1: rgba(128, 239, 128, 0.45);
+  --wash-2: rgba(66, 214, 116, 0.25);
+
+  --shadow: 0 10px 30px rgba(0,0,0,0.10);
+
+  --scroll-thumb: rgba(31, 43, 31, 0.18);
+  --scroll-thumb-hover: rgba(31, 43, 31, 0.28);
+
+  --ok: var(--c4);
+}
+
+/* Theme: 6A89A7 / BDDDFC / 88BDF2 / 384959 */
+html[data-theme="blue-mist"]{
+  --theme-name: "blue-mist";
+
+  --c1: #6A89A7;
+  --c2: #BDDDCF;
+  --c3: #88BDF2;
+  --c4: #384959;
+  --c5: #6A89A7;
+
+  /* Use the lightest as background, the deep slate as text */
+  --bg: #EAF3FD; /* derived for comfort */
+  --text: #384959;
+  --muted: rgba(56, 73, 89, 0.70);
+  --accent: #6A89A7;
+
+  --border: rgba(56, 73, 89, 0.18);
+
+  --hero-bg: rgba(189, 221, 252, 0.60);  /* close to BDDDFC */
+  --card-bg: rgba(189, 221, 252, 0.42);
+
+  --wash-1: rgba(136, 189, 242, 0.35);
+  --wash-2: rgba(106, 137, 167, 0.22);
+
+  --shadow: 0 10px 30px rgba(0,0,0,0.10);
+
+  --scroll-thumb: rgba(56, 73, 89, 0.18);
+  --scroll-thumb-hover: rgba(56, 73, 89, 0.28);
+
+  --ok: #2f7a4a;
+}
+
+/* Theme: 636B2F / BAC095 / D4DE95 / 3D4127 */
+html[data-theme="olive-woods"]{
+  --theme-name: "olive-woods";
+
+  --c1: #636B2F;
+  --c2: #BAC095;
+  --c3: #D4DE95;
+  --c4: #3D4127;
+  --c5: #636B2F;
+
+  --bg: #F4F6E4; /* derived for comfort */
+  --text: #3D4127;
+  --muted: rgba(61, 65, 39, 0.70);
+  --accent: #636B2F;
+
+  --border: rgba(61, 65, 39, 0.18);
+
+  --hero-bg: rgba(212, 222, 149, 0.55);
+  --card-bg: rgba(186, 192, 149, 0.55);
+
+  --wash-1: rgba(212, 222, 149, 0.40);
+  --wash-2: rgba(99, 107, 47, 0.22);
+
+  --shadow: 0 10px 30px rgba(0,0,0,0.10);
+
+  --scroll-thumb: rgba(61, 65, 39, 0.18);
+  --scroll-thumb-hover: rgba(61, 65, 39, 0.28);
+
+  --ok: #2f7a4a;
+}
