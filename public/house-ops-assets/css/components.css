@@ -38,7 +38,7 @@ select:focus{
 /* Button pill used across the UI */
 .icon-btn{
   appearance: none;
-  background: rgba(233, 237, 201, 0.70); /* based on #E9EDC9 */
+  background: var(--btn-bg);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 999px;
@@ -49,8 +49,8 @@ select:focus{
 }
 
 .icon-btn:hover{
-  background: rgba(233, 237, 201, 0.95);
-  border-color: rgba(212, 163, 115, 0.55);
+  background: var(--btn-bg-hover);
+  border-color: var(--btn-border-hover);
 }
 
 .icon-btn:active{ transform: translateY(1px); }
@@ -69,16 +69,15 @@ select:focus{
   gap: 10px;
 }
 
-/* Item rows (projects/reading/meals) */
 .item{
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
   padding: 12px;
- border: 1px solid var(--border);
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background: rgba(254, 250, 224, 0.55);
+  background: var(--item-bg);
 }
 
 .item-left{

@@ -40,6 +40,13 @@
   /* Status */
   --danger: #b23a48;
   --ok: #2f7a4a;
+  /* Buttons */
+--btn-bg: rgba(233, 237, 201, 0.70);
+--btn-bg-hover: rgba(233, 237, 201, 0.95);
+--btn-border-hover: rgba(212, 163, 115, 0.55);
+
+/* List items */
+--item-bg: rgba(254, 250, 224, 0.55);
 }
 
 /* Theme: Pistachio Dream */
@@ -163,6 +170,14 @@ html[data-theme="tech"]{
 
   --scroll-thumb: rgba(231,238,247,0.22);
   --scroll-thumb-hover: rgba(231,238,247,0.34);
+
+  /* Buttons */
+--btn-bg: rgba(22, 32, 48, 0.70);
+--btn-bg-hover: rgba(22, 32, 48, 0.92);
+--btn-border-hover: rgba(125, 211, 252, 0.35);
+
+/* List items */
+--item-bg: rgba(255, 255, 255, 0.03);
 
   --ok: #22c55e;
   --danger: #ef4444;
