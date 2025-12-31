@@ -10,7 +10,9 @@ import { initMeals } from "./features/meals.js";
 import { initWeekly } from "./features/weekly.js";
 import { initTools } from "./features/tools.js";
 
-const userId = document.documentElement.dataset.userId || "guest";
+const root = document.documentElement;
+const viewingUserId = root.dataset.userId || "guest";
+const isAdmin = root.dataset.isAdmin === "1";
 
 function initThemePicker() {
   const STORAGE_KEY = "houseOpsTheme";
@@ -44,14 +46,19 @@ initThemePicker();
 
 // Per-user local cache key (prevents “User B sees User A’s localStorage”)
 // Also lets us migrate the old global key one time.
-const storageKey = `${STORAGE_KEY}:${userId}`;
+const storageKey = `${STORAGE_KEY}:${viewingUserId}`;
 const legacyStorageKeys = [STORAGE_KEY];
+
+const apiUserId = isAdmin ? viewingUserId : null;
 
 const store = createStore({
   storageKey,
   legacyStorageKeys,
   defaultState: DEFAULT_STATE,
-  api: { get: apiGetState, save: apiSaveState }
+  api: {
+    get: () => apiGetState(apiUserId),
+    save: (state) => apiSaveState(state, apiUserId),
+  }
 });
 
 const renders = [
