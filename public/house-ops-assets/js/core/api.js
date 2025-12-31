@@ -3,8 +3,16 @@ function csrfToken() {
   return meta ? meta.getAttribute("content") : "";
 }
 
-export async function apiGetState() {
-  const res = await fetch("/house-ops/state", {
+function buildStateUrl(targetUserId) {
+  const url = new URL("/house-ops/state", window.location.origin);
+  if (targetUserId) {
+    url.searchParams.set("user_id", targetUserId);
+  }
+  return url.toString();
+}
+
+export async function apiGetState(targetUserId = null) {
+  const res = await fetch(buildStateUrl(targetUserId), {
     method: "GET",
     credentials: "same-origin",
     headers: {
@@ -18,8 +26,8 @@ export async function apiGetState() {
   return data.state; // can be null
 }
 
-export async function apiSaveState(state) {
-  const res = await fetch("/house-ops/state", {
+export async function apiSaveState(state, targetUserId = null) {
+  const res = await fetch(buildStateUrl(targetUserId), {
     method: "PUT",
     credentials: "same-origin",
     headers: {
@@ -33,4 +41,3 @@ export async function apiSaveState(state) {
   if (!res.ok) throw new Error(`Save failed: ${res.status}`);
   return true;
 }
-

@@ -1,5 +1,16 @@
 <!doctype html>
-<html lang="en" data-theme="pistachio" data-user-id="{{ auth()->id() ?? 'guest' }}">
+@php
+    $authUser ??= auth()->user();
+    $viewUser ??= $authUser;
+    $users ??= collect([$authUser]);
+@endphp
+<html
+  lang="en"
+  data-theme="pistachio"
+  data-user-id="{{ $viewUser->id }}"
+  data-auth-user-id="{{ $authUser->id }}"
+  data-is-admin="{{ $authUser->is_admin ? '1' : '0' }}"
+>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -43,6 +54,32 @@
       </button>
     </form>
   @endauth
+
+  @if ($authUser->is_admin)
+    <form method="GET" action="{{ route('house-ops') }}" style="margin:0; display:grid; gap:4px;">
+      <label class="meta" for="userSelect" style="margin:0; font-size:12px;">Viewing dashboard for</label>
+      <select
+        id="userSelect"
+        name="user_id"
+        class="icon-btn"
+        style="padding:6px 10px; font-size:12px;"
+        onchange="this.form.submit()"
+      >
+        @foreach ($users as $user)
+          <option value="{{ $user->id }}" @selected($user->id === $viewUser->id)>
+            {{ $user->name }} ({{ $user->email }})
+          </option>
+        @endforeach
+      </select>
+      <p class="meta" style="margin:0; font-size:12px;">
+        Logged in as {{ $authUser->email }}
+      </p>
+    </form>
+  @else
+    <p class="meta" style="margin:0; font-size:12px;">
+      Logged in as {{ $authUser->email }}
+    </p>
+  @endif
   </div>
 </header>
 
@@ -281,5 +318,4 @@
   <script type="module" src="{{ secure_asset('house-ops-assets/js/main.js') }}"></script>
 </body>
 </html>
-
 
