@@ -274,7 +274,7 @@
     </section>
 
     <footer class="footer">
-      <p>The System is only as good as we are. Merry Christmas! Bennett Hammock&trade;</p>
+      <p>The System&trade; is only as good as we are. Merry Christmas! Bennett Hammock</p>
     </footer>
   </main>
 
